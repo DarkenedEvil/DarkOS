@@ -1,0 +1,21 @@
+Dark OS Change Log
+DarkOS V1
+-First Alpha release
+-added startup program
+-added 2 number calculator
+-added home screen
+DarkOS V1.1
+-fixed startup bug causing people to enter home screen without login credentials
+-added first time register feature to startup
+-fixed first time register bug causing crashing if disk wasnt in disk drive
+DarkOS V2
+-rewrote startup and install feature
+-added make account feature to startup
+-rewrote login feature
+-added return to home screen after using a program from the home screen
+DarkOS V2.1
+-fixed bug that exited the calculator without finishing the calculation
+-fixed major bug that crashed the computer after installation
+DarkOS V3
+-rewrote calculator to be able to use 5 numbers
+-fixed bug that let people enter home screen by pressing ENTER at startup
