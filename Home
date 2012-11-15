@@ -1,7 +1,7 @@
 os.pullEvent = os.pullEventRaw
 term.clear()
 term.setCursorPos(1,1)
-print("ThankYou for using DarkOS V2")
+print("ThankYou for using DarkOS V3")
 print("More features comming soon!")
 print("Please note that V3 will not be out for a while because I am doing a major")
 print("update because there are a ton of bugs that MUST be fixed soon. Thank You")
@@ -21,6 +21,11 @@ local input = read()
 if input == "1" then
 term.clear()
 term.setCursorPos(1,1)
+print("Calculator Home      adventure    alias")
+print("cd         gps       id           label")
+print("lua        mkdir     monitor      pastebin")
+print("redprobe   redpulse  redset       shutdown")
+print("reboot     time      worm")
 print("Please type in the program name.")
 write("> ")
 local program = read()
@@ -54,4 +59,3 @@ print("UnKnown Command")
 sleep(2)
 shell.run("Home")
 end
-
