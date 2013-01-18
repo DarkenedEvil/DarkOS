@@ -1,0 +1,239 @@
+os.pullEvent = os.pullEventRaw
+_G.shell = shell
+term.clear()
+term.setCursorPos(1,1)
+print("ThankYou for using DarkOS V4.5")
+print("More features comming soon!")
+sleep(1)
+term.clear()
+term.setCursorPos(1,1)
+print("Welcome to your Home Screen!")
+print("Here you can choose what to do.")
+print("What would you like to do?")
+print("[1]Run a program?")
+print("[2]Make a program?")
+print("[3]Edit a program?")
+print("[4]Look at apis?")
+print("[5]Logout?")
+print("[6]Delete a user?")
+print("[7]Look up users.")
+print("[8]Create a user.")
+print("[9]Check for an update.")
+write("> ")
+local input = read()
+if input == "1" then
+	term.clear()
+	term.setCursorPos(1,1)
+	local programs = shell.programs()
+	textutils.pagedTabulate(programs)
+	print("Please type in the program you would like to run")
+	write("> ")
+	local runprog = read()
+	if runprog == programs then
+		shell.run(runprog)
+		return "Home"
+		else
+		print("Not a program!")
+		sleep(1.5)
+		shell.run("Home")
+		end
+	elseif input == "2" then
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Please type the name of the program you would like to make.")
+	write("> ")
+	local program_name = read()
+	shell.run("edit", program_name)
+	return "Home"
+	elseif input == "3" then
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Type in the programs name you would like to edit.")
+	write("> ")
+	local edit_name = read()
+	shell.run("edit", edit_name)
+	return "Home"
+	elseif input == "4" then
+	term.clear()
+	term.setCursorPos(1,1)
+	shell.run("apis")
+	print("Press any button to go back to the Home screen.")
+	DOS.rawread("admin")
+	elseif input == "5" then
+	os.reboot()
+	elseif input == "6" then
+	term.clear()
+	term.setCursorPos(1,1) 
+	print("Please enter YOUR username.")
+	write("> ")
+	local mainusername = read()
+	print("Please enter the user's username that you want to be deleted.")
+	write("> ")
+	local username = read()
+	print("Please enter the user's password to be deleted.")
+	write("> ")
+	local password = read("*")
+	local userfile = ("/users/"..username)
+	if fs.exists(userfile) then
+		local pass = io.open(userfile, "r")
+		local dataS = pass:read() 
+		local data = textutils.unserialize(dataS) 
+		local readpassword = data.password 
+		local readusername = data.user
+		pass:close()
+		if mainusername == readusername then
+			print("You can't delete your own user silly!")
+			sleep(1)
+			shell.run("Home")
+			else
+			if readpassword == password and username == readusername then
+				print("Are you sure you want to delete the user?")
+				print("[Y] or [N]")
+				local param21 = os.pullEvent("key")
+				if param21 == 30 then
+					print("Please make a username.")
+					write("> ")
+					local usermake
+					print("Please make a password.")
+					write("> ")
+					local passmake = read()
+					print("Please confirm the password.")
+					write("> ")
+					local passmakecheck = read()
+					if passmake == passmakecheck then
+						DOS.usercreate(usermake, passmake, "admin")
+						else
+						print("Passwords didn't match!")
+						sleep(1.5)
+						shell.run("admin")
+						end
+					elseif param21 == 19 then
+					print("Please make a username.")
+					write("> ")
+					local usermake
+					print("Please make a password.")
+					write("> ")
+					local passmake = read()
+					print("Please confirm the password.")
+					write("> ")
+					local passmakecheck = read()
+					if passmake == passmakecheck then
+						DOS.usercreate(usermake, passmake, "user")
+						else
+						print("Passwords didn't match!")
+						sleep(1.5)
+						shell.run("admin")
+						end
+					else
+					print("Please select [A] or [R].")
+					sleep(1.5)
+					os.run({}, "admin")
+					end
+				else
+				print("Password or username did not match")
+				sleep(1.5)
+				shell.run("admin")
+				end
+			end
+		else
+		print("Users folder is non-existant.")
+		rawread("admin")
+		end
+	elseif input == "7" then
+	term.clear()
+	term.setCursorPos(1,1)
+	local FileList = fs.list("/users/")
+	for _, file in ipairs(FileList) do 
+		print(file)
+		sleep(1.5)
+		DOS.rawread("admin")
+		end
+	elseif input == "8" then
+    term.clear()	
+	term.setCursorPos(1,1)
+	print("Will this be an Admin [A] or a regular [R] user?")
+    local sEvent, param21 = os.pullEvent("key")
+        if sEvent == "key" then
+            if param21 == 30 then
+				print("Please make a username.")
+				write("> ")
+				local usermake = read()
+				print("Please make a password.")
+				write("> ")
+				local passmake = read()
+				print("Please confirm the password.")
+				write("> ")
+				local passmakecheck = read()
+				if passmake == passmakecheck then
+					DOS.usercreate(usermake, passmake, "admin")
+					else
+					print("Passwords didn't match!")
+					sleep(1.5)
+					shell.run("admin")
+					end
+				elseif param21 == 19 then
+				print("Please make a username.")
+				write("> ")
+				local usermake = read()
+				print("Please make a password.")
+				write("> ")
+				local passmake = read()
+				print("Please confirm the password.")
+				write("> ")
+				local passmakecheck = read()
+				if passmake == passmakecheck then
+					DOS.usercreate(usermake, passmake, "user")
+					else
+					print("Passwords didn't match!")
+					sleep(1.5)
+					shell.run("admin")
+					end
+				else
+				print("Please select [A] or [R].")
+				sleep(1.5)
+				os.run({}, "admin")
+				end
+			else
+			print("ERROR")
+			end
+    elseif input == "9" then
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Checking for update. Please wait")
+	sleep(1)
+	shell.run("pastebin", "get", "CY7wfEmr", "Tempinfo")
+	z = fs.open("Tempinfo", "r")
+	version = z:readAll()
+	z:close()
+	x = fs.open("info", "r")
+	currentver = x:readAll()
+	x:close()
+	if currentver < version then
+		print("Your OS is out of date! Would you like to update?")
+		print("[1] Yes")
+		print("[2] No")
+		write("> ")
+		local checkup = read()
+		if checkup == "1" then
+			fs.delete("Tempinfo")
+			shell.run("/programs/update")
+			elseif checkup == "2" then
+			fs.delete("Tempinfo")
+			shell.run("admin")
+			else
+			print("Please select 1 or 2!")
+			sleep(2)
+			fs.delete("Tempinfo")
+			shell.run("admin")
+			end
+		else
+		print("You are up to date!")
+		sleep(2)
+		fs.delete("Tempinfo")
+		shell.run("admin")
+		end
+  	else
+    print("Invalid command please select 1-9.")
+	print("Press any key to go back to the Home screen.")
+	DOS.rawread("admin")
+	end

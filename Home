@@ -1,61 +1,39 @@
 os.pullEvent = os.pullEventRaw
+_G.shell = shell
 term.clear()
 term.setCursorPos(1,1)
-print("ThankYou for using DarkOS V3")
+print("ThankYou for using DarkOS V4.5")
 print("More features comming soon!")
-print("Please note that V3 will not be out for a while because I am doing a major")
-print("update because there are a ton of bugs that MUST be fixed soon. Thank You")
-sleep(5)
+sleep(1)
 term.clear()
 term.setCursorPos(1,1)
 print("Welcome to your Home Screen!")
 print("Here you can choose what to do.")
-print("What would you like to do")
+print("What would you like to do?")
 print("[1]Run a program?")
-print("[2]Make a program?")
-print("[3]Edit a program?")
-print("[4]Look at apis?")
-print("[5]Logout?")
+print("[2]Logout?")
 write("> ")
 local input = read()
 if input == "1" then
-term.clear()
-term.setCursorPos(1,1)
-print("Calculator Home      adventure    alias")
-print("cd         gps       id           label")
-print("lua        mkdir     monitor      pastebin")
-print("redprobe   redpulse  redset       shutdown")
-print("reboot     time      worm")
-print("Please type in the program name.")
-write("> ")
-local program = read()
-shell.run(program)
-return "Home"
-elseif input == "2" then
-term.clear()
-term.setCursorPos(1,1)
-print("Please type the name of the program you would like to make.")
-write("> ")
-local program_name = read()
-shell.run("edit", program_name)
-return "Home"
-elseif input == "3" then
-term.clear()
-term.setCursorPos(1,1)
-print("Type in the programs name you would like to edit.")
-write("> ")
-local edit_name = read()
-shell.run("edit", edit_name)
-return "Home"
-elseif input == "4" then
-term.clear()
-term.setCursorPos(1,1)
-shell.run("apis")
-return "Home"
-elseif input == "5" then
-os.reboot()
-else
-print("UnKnown Command")
-sleep(2)
-shell.run("Home")
-end
+	term.clear()
+	term.setCursorPos(1,1)
+	local programs = fs.list("/programs")
+	textutils.pagedTabulate(programs)
+	print("Please type in the program you would like to run")
+	write("> ")
+	local runprog = read()
+	if runprog == programs then
+		shell.run(runprog)
+		return "Home"
+		else
+		print("Not a program!")
+		sleep(1.5)
+		shell.run("Home")
+		end
+	elseif input == "2" then
+	os.reboot()
+	else
+	print("UnKnown Command")
+	sleep(2)
+	shell.run("Home")
+	end

@@ -1,0 +1,126 @@
+_G.shell = shell
+--Function to run a program if the correct key is pressed(2 keys)--
+function keychoose2(Knum1, Knum2, progrun1, progrun2, wrongrun)
+	local param = os.pullEvent("key")
+    if param == Knum1 then
+		os.run({}, progrun1)
+		elseif param == Knum2 then
+		os.run({}, progrun2)
+		else
+		os.run({}, wrongrun)                
+		end
+	end
+	
+	
+--Function to login users--		
+function login(username, password)
+	local userfile = ("/users/"..username)
+	if fs.exists(userfile) then
+		local pass = io.open(userfile, "r")
+		local dataS = pass:read() 
+		local data = textutils.unserialize(dataS) 
+		local readpassword = data.pass
+		local readusername = data.user
+		local level = data.settings
+		if level == "admin" then
+			if readpassword == password and username == readusername then
+				os.run({}, "admin")
+				else
+				print("Wrong username or password!")
+				sleep(1.5)
+				os.run({}, "startup")
+				end
+		    end
+        if level == "user" then
+			if readpassword == password and username == readusername then
+				os.run({}, "Home")
+				else
+				print("Wrong username or password.")
+				sleep(1.5)
+				os.run({}, "startup")
+				end
+			end
+		else
+		print("User does not exist!")
+		sleep(1.5)
+		os.reboot()
+		end
+	end
+
+	
+--Function to create an account--
+function usercreate(username, password, level)
+	local userfile = ("/users/"..username)
+	if fs.exists(userfile) then
+		print("Sorry that username is already taken!")
+		sleep(1.5)
+		os.run({}, "admin")
+		else
+		io.open(userfile)
+		local fileopen = io.open(userfile, "w") 
+		local passwrite = {pass = password, user = username, settings = level} 
+		local dataS = textutils.serialize(passwrite) 
+		local writeIsFail = fileopen:write(dataS) 
+		fileopen:close() 
+		print("User made!") 
+		sleep(1.5)
+		os.run({}, "admin")
+		end
+	end
+
+
+--Function to delete an account--
+function userdelete(dusername, password, username)
+	local userfile = ("/users/"..dusername)
+	if fs.exists(userfile) then
+		local pass = io.open(userfile, "r")
+		local dataS = pass:read() 
+		local data = textutils.unserialize(dataS) 
+		local readpassword = data.password 
+		local readusername = data.user
+		pass:close()
+		if username == readusername then
+			print("You can't delete your own user silly!")
+			sleep(1)
+			os.run({}, "Home")
+			else
+			if readpassword == password and dusername == readusername then
+				print("Are you sure you want to delete the user?")
+				print("[Y] or [N]")
+				local param = os.pullEvent("key")
+				if param == 21 then
+				    fs.delete(userfile)
+					print("File deleted!")
+					sleep(1.5)
+					os.run({}, "admin")
+					elseif param == 49 then
+					os.run({}, "admin")
+					else
+					print("Please choose [Y] or [N].")
+					sleep(1.5)
+					os.run({}, "admin")                
+					end
+				else
+				print("Incorrect password or username!")
+				sleep(1.5)
+				os.run({}, "admin")
+				end
+			end			
+		else
+		print("That user doesn't exist!")
+		sleep(1.5)
+		os.run({}, "admin")
+		end
+	end	
+	
+	
+--Function to return to a specific program when any key is pressed--
+function rawread(returnprog)
+    bRead = true
+    while(bRead) do
+        local sEvent, param = os.pullEvent("key")
+        if(sEvent == "key") then
+            os.run({}, returnprog)
+        end
+    end
+end
