@@ -22,6 +22,7 @@ function login(username, password)
 		local readpassword = data.pass
 		local readusername = data.user
 		local level = data.settings
+		pass:close()
 		if level == "admin" then
 			if readpassword == password and username == readusername then
 				os.run({}, "admin")
@@ -116,6 +117,7 @@ function userdelete(dusername, password, username)
 	
 --Function to return to a specific program when any key is pressed--
 function rawread(returnprog)
+	print("Press any key to return.")
     bRead = true
     while(bRead) do
         local sEvent, param = os.pullEvent("key")
