@@ -2,7 +2,7 @@ os.pullEvent = os.pullEventRaw
 _G.shell = shell
 term.clear()
 term.setCursorPos(1,1)
-print("ThankYou for using DarkOS V4.5")
+print("ThankYou for using DarkOS V4.6")
 print("More features comming soon!")
 sleep(1)
 term.clear()
@@ -15,36 +15,37 @@ print("[2]Make a program?")
 print("[3]Edit a program?")
 print("[4]Look at apis?")
 print("[5]Logout?")
-print("[6]Delete a user?")
-print("[7]Look up users.")
-print("[8]Create a user.")
-print("[9]Check for an update.")
+print("[6]User controls?")
+print("[7]Check for an update?")
+print("[8]Uninstall DarkOS?")
 write("> ")
 local input = read()
 if input == "1" then
 	term.clear()
 	term.setCursorPos(1,1)
+	local uprograms = fs.list("/programs")
 	local programs = shell.programs()
+	print("ComputerCraft programs: ")
+	print(" ")
 	textutils.pagedTabulate(programs)
+	print(" ")
+	print("User-Made programs: ")
+	print(" ")
+	textutils.pagedTabulate(uprograms)
+	print(" ")
 	print("Please type in the program you would like to run")
 	write("> ")
 	local runprog = read()
-	if runprog == programs then
-		shell.run(runprog)
-		return "Home"
-		else
-		print("Not a program!")
-		sleep(1.5)
-		shell.run("Home")
-		end
+	shell.run(runprog)
+	DOS.rawread("admin")
 	elseif input == "2" then
 	term.clear()
 	term.setCursorPos(1,1)
 	print("Please type the name of the program you would like to make.")
 	write("> ")
 	local program_name = read()
-	shell.run("edit", program_name)
-	return "Home"
+	shell.run("edit", "/programs/"..program_name)
+	DOS.rawread("admin")
 	elseif input == "3" then
 	term.clear()
 	term.setCursorPos(1,1)
@@ -52,48 +53,121 @@ if input == "1" then
 	write("> ")
 	local edit_name = read()
 	shell.run("edit", edit_name)
-	return "Home"
+	DOS.rawread("admin")
 	elseif input == "4" then
 	term.clear()
 	term.setCursorPos(1,1)
-	shell.run("apis")
-	print("Press any button to go back to the Home screen.")
+	local papis = shell.run("apis")
+	textutils.pagedTabulate(papis)
 	DOS.rawread("admin")
 	elseif input == "5" then
 	os.reboot()
 	elseif input == "6" then
 	term.clear()
-	term.setCursorPos(1,1) 
-	print("Please enter YOUR username.")
+	term.setCursorPos(1,1)
+	print("What would you like to do with users.")
+	print("[1]Look up users?")
+	print("[2]Delete a user?")
+	print("[3]Create a user?")
+	print("[4]Change a password?")
+	print("[5]Go back?")
 	write("> ")
-	local mainusername = read()
-	print("Please enter the user's username that you want to be deleted.")
-	write("> ")
-	local username = read()
-	print("Please enter the user's password to be deleted.")
-	write("> ")
-	local password = read("*")
-	local userfile = ("/users/"..username)
-	if fs.exists(userfile) then
-		local pass = io.open(userfile, "r")
-		local dataS = pass:read() 
-		local data = textutils.unserialize(dataS) 
-		local readpassword = data.password 
-		local readusername = data.user
-		pass:close()
-		if mainusername == readusername then
-			print("You can't delete your own user silly!")
-			sleep(1)
-			shell.run("Home")
+	local userfunc = read()
+	if userfunc == "2" then
+		print("Please enter YOUR username.")
+		write("> ")
+		local mainusername = read()
+		print("Please enter the user's username that you want to be deleted.")
+		write("> ")
+		local username = read()
+		print("Please enter the user's password to be deleted.")
+		write("> ")
+		local password = read("*")
+		local userfile = ("/users/"..username)
+		if fs.exists(userfile) then
+			local pass = io.open(userfile, "r")
+			local dataS = pass:read() 
+			local data = textutils.unserialize(dataS) 
+			local readpassword = data.password 
+			local readusername = data.user
+			pass:close()
+			if mainusername == readusername then
+				print("You can't delete your own user silly!")
+				sleep(1)
+				shell.run("Home")
+				else
+				if readpassword == password and username == readusername then
+					print("Are you sure you want to delete the user?")
+					print("[Y] or [N]")
+					local param21 = os.pullEvent("key")
+					if param21 == 30 then
+						print("Please make a username.")
+						write("> ")
+						local usermake
+						print("Please make a password.")
+						write("> ")
+						local passmake = read()
+						print("Please confirm the password.")
+						write("> ")
+						local passmakecheck = read()
+						if passmake == passmakecheck then
+							DOS.usercreate(usermake, passmake, "admin")
+							else
+							print("Passwords didn't match!")
+							sleep(1.5)
+							shell.run("admin")
+							end
+						elseif param21 == 19 then
+						print("Please make a username.")
+						write("> ")
+						local usermake
+						print("Please make a password.")
+						write("> ")
+						local passmake = read()
+						print("Please confirm the password.")
+						write("> ")
+						local passmakecheck = read()
+						if passmake == passmakecheck then
+							DOS.usercreate(usermake, passmake, "user")
+							else
+							print("Passwords didn't match!")
+							sleep(1.5)
+							shell.run("admin")
+							end
+						else
+						print("Please select [A] or [R].")
+						sleep(1.5)
+						os.run({}, "admin")
+						end
+					else
+					print("Password or username did not match")
+					sleep(1.5)
+					shell.run("admin")
+					end
+				end
 			else
-			if readpassword == password and username == readusername then
-				print("Are you sure you want to delete the user?")
-				print("[Y] or [N]")
-				local param21 = os.pullEvent("key")
+			print("Users folder is non-existant.")
+			rawread("admin")
+			end
+		elseif userfunc == "1" then
+		term.clear()
+		term.setCursorPos(1,1)
+		local FileList = fs.list("/users/")
+		for _, file in ipairs(FileList) do  
+			print(file)
+			sleep(1.5)
+			shell.run("admin")
+			end
+		elseif userfunc == "3" then
+		term.clear()	
+		term.setCursorPos(1,1)
+		print("Will this be an Admin [A] or a regular [R] user?")
+		local sEvent, param21 = os.pullEvent("key")
+			if sEvent == "key" then
 				if param21 == 30 then
 					print("Please make a username.")
 					write("> ")
-					local usermake
+					local usermake = read()
 					print("Please make a password.")
 					write("> ")
 					local passmake = read()
@@ -110,7 +184,7 @@ if input == "1" then
 					elseif param21 == 19 then
 					print("Please make a username.")
 					write("> ")
-					local usermake
+					local usermake = read()
 					print("Please make a password.")
 					write("> ")
 					local passmake = read()
@@ -130,73 +204,57 @@ if input == "1" then
 					os.run({}, "admin")
 					end
 				else
-				print("Password or username did not match")
+				print("ERROR")
+				end
+		elseif userfunc == "4" then
+		term.clear()
+		term.setCursorPos(1,1)
+		print("Type in the name of the users password that you would like to change.")
+		print("Note:Admins can delete anyones password.")
+		write("> ")
+		local userchange = read()
+		print("Please enter the original password.")
+		write("> ")
+		local oPass = read()
+		local cuserfile = ("/users/"..userchange)
+		if fs.exists(cuserfile) then
+			local cpass = io.open(cuserfile, "r")
+			local cdataS = cpass:read() 
+			local cdata = textutils.unserialize(cdataS) 
+			local creadpassword = cdata.pass
+			local creadusername = cdata.user
+			local clevel = cdata.settings
+			if userchange == creadusername and oPass == creadpassword then
+				print("Please enter the new password.")
+				write("> ")
+				local newpass = read()
+				local fileopen = io.open(userchange, "w") 
+				local passwrite = {pass = newpass, user = creadusername, settings = clevel} 
+				local dataS = textutils.serialize(passwrite) 
+				local writeIsFail = fileopen:write(dataS)
+				print("Password changed!")
+				sleep(1.5)
+				DOS.rawread("admin")
+				else
+				print("Username or password was incorrect!")
 				sleep(1.5)
 				shell.run("admin")
 				end
+			else
+			print("That user doesn't exist!")
+			print("Please use the userchecker to list all users on the computer.")
+			sleep(2)
+			shell.run("admin")
 			end
+		elseif userfunc == "5" then
+		shell.run("admin")
 		else
-		print("Users folder is non-existant.")
-		rawread("admin")
-		end
-	elseif input == "7" then
-	term.clear()
-	term.setCursorPos(1,1)
-	local FileList = fs.list("/users/")
-	for _, file in ipairs(FileList) do 
-		print(file)
+		print("Please choose 1-5!")
 		sleep(1.5)
 		DOS.rawread("admin")
 		end
-	elseif input == "8" then
-    term.clear()	
-	term.setCursorPos(1,1)
-	print("Will this be an Admin [A] or a regular [R] user?")
-    local sEvent, param21 = os.pullEvent("key")
-        if sEvent == "key" then
-            if param21 == 30 then
-				print("Please make a username.")
-				write("> ")
-				local usermake = read()
-				print("Please make a password.")
-				write("> ")
-				local passmake = read()
-				print("Please confirm the password.")
-				write("> ")
-				local passmakecheck = read()
-				if passmake == passmakecheck then
-					DOS.usercreate(usermake, passmake, "admin")
-					else
-					print("Passwords didn't match!")
-					sleep(1.5)
-					shell.run("admin")
-					end
-				elseif param21 == 19 then
-				print("Please make a username.")
-				write("> ")
-				local usermake = read()
-				print("Please make a password.")
-				write("> ")
-				local passmake = read()
-				print("Please confirm the password.")
-				write("> ")
-				local passmakecheck = read()
-				if passmake == passmakecheck then
-					DOS.usercreate(usermake, passmake, "user")
-					else
-					print("Passwords didn't match!")
-					sleep(1.5)
-					shell.run("admin")
-					end
-				else
-				print("Please select [A] or [R].")
-				sleep(1.5)
-				os.run({}, "admin")
-				end
-			else
-			print("ERROR")
-			end
-    elseif input == "9" then
+				
+	elseif input == "7" then
 	term.clear()
 	term.setCursorPos(1,1)
 	print("Checking for update. Please wait")
@@ -219,21 +277,22 @@ if input == "1" then
 			shell.run("/programs/update")
 			elseif checkup == "2" then
 			fs.delete("Tempinfo")
-			shell.run("admin")
+			DOS.rawread("admin")
 			else
 			print("Please select 1 or 2!")
-			sleep(2)
 			fs.delete("Tempinfo")
-			shell.run("admin")
+			DOS.rawread("admin")
 			end
 		else
+		term.clear()
+		term.setCursorPos(1,1)
 		print("You are up to date!")
-		sleep(2)
 		fs.delete("Tempinfo")
-		shell.run("admin")
+		DOS.rawread("admin")
 		end
+	elseif input == "8" then
+	shell.run("uninstall")
   	else
-    print("Invalid command please select 1-9.")
-	print("Press any key to go back to the Home screen.")
+	print("Invalid command please select 1-8.")
 	DOS.rawread("admin")
 	end
