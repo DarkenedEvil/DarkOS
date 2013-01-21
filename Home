@@ -2,7 +2,7 @@ os.pullEvent = os.pullEventRaw
 _G.shell = shell
 term.clear()
 term.setCursorPos(1,1)
-print("ThankYou for using DarkOS V4.5")
+print("ThankYou for using DarkOS V5")
 print("More features comming soon!")
 sleep(1)
 term.clear()
