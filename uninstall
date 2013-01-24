@@ -1,0 +1,53 @@
+os.pullEvent = os.pullEventRaw
+term.clear()
+term.setCursorPos(1,1)
+print("Are you sure you want to uninstall DarkOS? [Y]Yes or [N]No?")
+write("> ")
+local input = read()
+if input == "y" then
+  print("Would you like to delete your personal programs?")
+	print("[Y] or [N]")
+	write("> ")
+	local pinput = read()
+	if pinput == "y" then
+		print("Uninstalling DarkOS.")
+		sleep(1)
+		fs.delete("startup")
+		fs.delete("admin")
+		fs.delete("Home")
+		fs.delete("programs/calculator")
+		fs.delete("logout")
+		fs.delete("info")
+		fs.delete("/apis")
+		os.delete("/users")
+		fs.delete("/programs")
+		fs.delete("setup")
+		fs.delete("uninstall")
+		print("All files deleted.")
+		os.reboot()
+		elseif pinput == "n" then
+		print("Uninstalling DarkOS.")
+		print("All personal programs are held in /programs directory.")
+		fs.delete("setup")
+		fs.delete("startup")
+		fs.delete("admin")
+		fs.delete("Home")
+		fs.delete("programs/calculator")
+		fs.delete("logout")
+		fs.delete("info")
+		fs.delete("/apis")
+		fs.delete("/users")
+		fs.delete("uninstall")
+		print("All files deleted.")
+		os.reboot()
+		else
+		print("Please choose [Y] or [N].")
+		sleep(1.5)
+		DOS.rawread("admin")
+		end
+	elseif  input == "n" then
+	DOS.rawread("admin")
+	else
+	print("Please choose [Y] or [N]")
+	DOS.rawread("admin")
+	end
