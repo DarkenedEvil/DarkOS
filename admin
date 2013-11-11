@@ -8,105 +8,150 @@ if #tArgs > 1 then
 	error("Expected Username but got more! Please report this to DarkenedEvil")
 end
 
-term.clear()
-term.setCursorPos(1,1)
-print("Welcome to your Home Screen!")
-print("Here you can choose what to do.")
-print("What would you like to do?")
-print("[1]Run a program?")
-print("[2]Make a program?")
-print("[3]Edit a program?")
-print("[4]Look at apis?")
-print("[5]Logout?")
-print("[6]User controls?")
-print("[7]Check for an update?")
-print("[8]Uninstall DarkOS?")
-write("> ")
-local input = read()
-if input == "1" then
-	term.clear()
+local username = tArgs[1]
+
+function Header()
 	term.setCursorPos(1,1)
-	local uprograms = fs.list("/programs")
-	local programs = shell.programs()
-	print("ComputerCraft programs: ")
-	print(" ")
-	textutils.pagedTabulate(programs)
-	print(" ")
-	print("User-Made programs: ")
-	print(" ")
-	textutils.pagedTabulate(uprograms)
-	print(" ")
-	print("Please type in the program you would like to run")
-	write("> ")
-	local runprog = read()
-	os.run({}, runprog)
-	DOS.rawread("admin")
-	elseif input == "2" then
-	term.clear()
-	term.setCursorPos(1,1)
-	print("Please type the name of the program you would like to make.")
-	write("> ")
-	local program_name = read()
-	os.run({},"edit", "/programs/"..program_name)
-	DOS.rawread("admin")
-	elseif input == "3" then
-	term.clear()
-	term.setCursorPos(1,1)
-	print("Type in the programs name you would like to edit.")
-	write("> ")
-	local edit_name = read()
-	os.run({},"edit", edit_name)
-	DOS.rawread("admin")
-	elseif input == "4" then
-	term.clear()
-	term.setCursorPos(1,1)
-	local papis = shell.run("apis")
-	textutils.pagedTabulate(papis)
-	DOS.rawread("admin")
-	elseif input == "5" then
-	os.reboot()
-	elseif input == "6" then
-	os.run({}, "usercontrol", tArgs[1])				
-	elseif input == "7" then
-	term.clear()
-	term.setCursorPos(1,1)
-	print("Checking for update. Please wait")
-	sleep(1)
-	shell.run("pastebin", "get", "CY7wfEmr", "Tempinfo")
-	z = fs.open("Tempinfo", "r")
-	version = z:readAll()
-	z:close()
-	x = fs.open("info", "r")
-	currentver = x:readAll()
-	x:close()
-	if currentver < version then
-		print("Your OS is out of date! Would you like to update?")
-		print("[1] Yes")
-		print("[2] No")
-		write("> ")
-		local checkup = read()
-		if checkup == "1" then
-			fs.delete("Tempinfo")
-			shell.run("/programs/update")
-			elseif checkup == "2" then
-			fs.delete("Tempinfo")
-			DOS.rawread("admin")
-			else
-			print("Please select 1 or 2!")
-			fs.delete("Tempinfo")
-			DOS.rawread("admin")
-			end
-		else
-		term.clear()
-		term.setCursorPos(1,1)
-		print("You are up to date!")
-		fs.delete("Tempinfo")
-		DOS.rawread("admin")
-		end
-	elseif input == "8" then
-	os.run({}, "uninstall")
-  	else
-	print("Invalid command please select 1-8.")
-	DOS.rawread("admin", tArgs[1])
+	term.setBackgroundColor(colors.blue)
+	term.clearLine()
+	term.setCursorPos(2,1)
+	print("[Home]     Welcome "..username)
+end
+
+function printcentred(text)
+	local maxw, maxh = term.getSize() 
+	local curx, cury = term.getCursorPos()
+	term.setCursorPos((maxw-#text)/2,cury)
+	term.write(text)
+	term.setCursorPos(curx,cury+1)
 	end
-	DOS.rawread("admin", tArgs[1])
+
+function drawDropDown()
+	term.setBackgroundColor(colors.lightGray)
+	term.setCursorPos(1,2)
+	print("         ")
+	print("Update   ")
+	print("Settings ")
+	print("Shell    ")
+	print("About    ")
+	print("Logout   ")
+	print("Shutdown ")
+	print("         ")
+end
+
+function drawUIcon()
+	uIcon = paintutils.loadImage("u.icon")
+	paintutils.drawImage(uIcon,1,1)
+	term.setCursorPos(35,15)
+	term.setBackgroundColor(colors.lightGray)
+	print(" User Control")
+end
+
+function drawTaskBar()
+	term.setBackgroundColor(colors.lightGray)
+	term.setCursorPos(1,2)
+	print("Task Bar")
+	term.setCursorPos(1,4)
+	print("App     ")
+	print("Center  ")
+	term.setCursorPos(1,7)
+	print("File    ")
+	print("Browser ")	
+end
+
+function drawAlert(text)
+	term.setBackgroundColor(colors.red)
+	local maxw, maxh = term.getSize()
+	term.setCursorPos(1,math.floor(maxh/2))
+	printcentred(text)
+end
+
+function drawAbout()
+	aboutUI = paintutils.loadImage("about.page")
+	paintutils.drawImage(aboutUI,1,1)
+	term.setBackgroundColor(colors.red)
+	term.setCursorPos(40,5)
+	print("X")
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(13,6)
+	print("DarkOS is an OS for ")
+	term.setCursorPos(13,7)
+	print("Computercraft that adds ")
+	term.setCursorPos(13,8)
+	print("multiusers and tab-")
+	term.setCursorPos(13,9)
+	print("progression login.")
+	term.setCursorPos(13, 12)
+	print("Version 0.0.1")
+	
+end	
+
+function drawBackGround()
+	term.clear()
+	term.setCursorPos(1,1)
+	term.setBackgroundColor(colors.lightBlue)
+	backGround = paintutils.loadImage(".background")
+	paintutils.drawImage(backGround,1,1)
+	Header()
+	drawUIcon()
+	drawTaskBar()
+end
+drawBackGround()
+while true do
+local event, button, x, y = os.pullEvent()
+if event == "mouse_click" then
+	if x >= 3 and x <= 8 and y == 1 and button == 1 then --DropDown
+		drawDropDown()
+		while true do
+			local event, button, x, y = os.pullEvent()
+			if event == "mouse_click" then
+				if x >= 1 and x <= 8 and y == 3 and button == 1 then --Update
+					--os.run({}, "update")
+					elseif x >= 1 and x <= 8 and y == 4 and button == 1 then --Settings
+					
+					elseif x >= 1 and x <= 8 and y == 5 and button == 1 then --Shell
+					
+					elseif x >= 1 and x <= 8 and y == 6 and button == 1 then --about
+					drawBackGround()
+					drawAbout()
+					while true do
+						local event, button, x, y = os.pullEvent()
+						if event == "mouse_click" then
+							if x == 40 and y == 5 and button == 1 then --close box
+								drawBackGround()
+								break
+							end
+						end
+					end
+					break
+					elseif x >= 1 and x <= 8 and y == 7 and button == 1 then --Logout
+					os.reboot()
+					elseif x >= 1 and x <= 8 and y == 8 and button == 1 then --Shutdown
+					os.shutdown()
+					elseif x >= 1 and x <= 7 and y == 1 and button == 1 then
+					drawBackGround()
+					break
+				end
+			end
+		end
+		else
+		drawBackGround()
+		end
+		if x >= 37 and x <= 45 and y >= 5 and y <= 15 and button == 1 then --Usercontrol
+			drawAlert("Comming Soon")
+			--os.run({}, "usercontrol", tArgs[1])
+			elseif x >= 1 and x <= 8 and y <=8 and y >= 7 and button == 1  then --FileBrowser
+			os.run({}, "filebrowser")
+			elseif x >=1 and x <= 8 and y <=5 and y >=4 and button == 1 then --AppCenter
+				if Alert == true then
+					drawBackGround()
+					Alert = false
+					else
+					drawAlert("Comming Soon!")
+					Alert = true
+					end
+			else
+			--drawBackGround()
+		end
+	end
+end

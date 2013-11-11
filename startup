@@ -42,21 +42,56 @@ if term.isColor() then
 		printcentred("[Login]")
 	end
 	
+	function drawUserBox()
+	term.setCursorPos(1, 12)
+	term.setBackgroundColor(colors.lightBlue)
+	term.clearLine()
+	term.setCursorPos(18, 12)
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+	end
+	
+	function drawPassBox()
+	term.setCursorPos(18, 14)
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+	end
+	
 	drawScreen()
 	username = ("             ")
 	password = ("             ")
+	tUser = false
+	tPass = false
 	while true do
-	local event, button, x, y = os.pullEvent()
-	if event == "mouse_click" then
-		if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
-			term.setBackgroundColor(colors.lightGray)
-			term.setCursorPos(18, 12)
-			username = read()
-			term.setBackgroundColor(colors.lightBlue)
-			elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
+	
+	local event, key = os.pullEvent()
+	if key == keys.tab then
+		if tabs == "password" then
+			drawPassBox()
 			term.setBackgroundColor(colors.lightGray)
 			term.setCursorPos(18, 14)
 			password = read("*")
+			tabs = "username"
+			term.setBackgroundColor(colors.lightBlue)
+		end
+	end
+		
+	local event, button, x, y = os.pullEvent()
+	if event == "mouse_click" then
+		if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
+			drawUserBox()
+			term.setBackgroundColor(colors.lightGray)
+			term.setCursorPos(18, 12)
+			username = read()
+			tabs = "password"
+			tUser = true
+			term.setBackgroundColor(colors.lightBlue)
+			elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
+			drawPassBox()
+			term.setBackgroundColor(colors.lightGray)
+			term.setCursorPos(18, 14)
+			password = read("*")
+			tPass = true
 			term.setBackgroundColor(colors.lightBlue)
 			elseif x >= 21 and x <= 28 and y == 16 and button == 1 then --loginbutton
 			DOS.login(username, password)

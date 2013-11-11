@@ -10,7 +10,7 @@ if #tArgs > 1 then
 	DOS.rawread("admin", tArgs[1])
 end
 
-local username = tArgs[1]
+returnName = tArgs[1]
 
 local printcentred =
 	function(text)
@@ -99,27 +99,19 @@ local printcentred =
 	 elseif key == keys.down and o == 4 then
 	  o = 1
 	 elseif key == keys.delete then
-	  os.run({}, "admin")
+	  os.run({}, "admin", returnName)
 	 elseif key == keys.enter then
 	  break
 	 end
 	end
 if o == 2 then
-	print("Please enter YOUR username.")
-	write("> ")
-	local mainusername = read()
-	if mainusername == "" then
-		print("Please enter a username")
-		os.sleep(1.5)
-		os.run({}, "admin")
-		end
 	print("Please enter the user's username that you want to be deleted.")
 	write("> ")
 	local username = read()
 	print("Please enter the user's password to be deleted.")
 	write("> ")
 	local password = read("*")
-	DOS.userdelete(username, password, mainusername)
+	DOS.userdelete(username, password, returnName)
 		elseif o == 1 then
 		term.clear()
 		term.setCursorPos(1,1)
@@ -127,7 +119,7 @@ if o == 2 then
 		for _, file in ipairs(FileList) do
 		print(_, ") ", file)
 		end
-		DOS.rawread("admin")
+		DOS.rawread("usercontrol", tArgs[1])
 		elseif o == 3 then
 		term.clear()	
 		term.setCursorPos(1,1)
@@ -145,11 +137,11 @@ if o == 2 then
 					write("> ")
 					local passmakecheck = read()
 					if password == passmakecheck then
-						DOS.usercreate(username, password, "admin")
+						DOS.usercreate(username, password, "admin", returnName)
 						else
 						print("Passwords didn't match!")
 						sleep(1.5)
-						os.run({}, userType)
+						DOS.rawread("usercontrol", tArgs[1])
 						end
 					elseif param21 == "r" then
 					print("Please make a username.")
@@ -162,70 +154,67 @@ if o == 2 then
 					write("> ")
 					local passmakecheck = read()
 					if passmake == passmakecheck then
-						DOS.usercreate(usermake, passmake, "user")
+						DOS.usercreate(usermake, passmake, "user", returnName)
 						else
 						print("Passwords didn't match!")
 						sleep(1.5)
-						os.run({}, userType)
+						DOS.rawread("usercontrol", tArgs[1])
 						end
 					else
 					print("Please select [A] or [R].")
 					sleep(1.5)
-					os.run({}, userType)
+					DOS.rawread("usercontrol", tArgs[1])
 					end
 				else
 				print("ERROR")
 				end
-		elseif 0 == 4 then
+		elseif o == 4 then
 		term.clear()
 		term.setCursorPos(1,1)
 		print("Type in the name of the users password that you would like to change.")
-		print("Note:Admins can delete anyones password.")
 		write("> ")
 		local userchange = read()
 		if userchange ~= nil then
-		print("Please enter a username")
-		os.sleep(1.5)
-		os.run({}, userType)
-		else
-		print("nope")
-		end
-		print("Please enter the original password.")
-		write("> ")
-		local oPass = read()
-		cuserfile = ("/users/"..userchange)
-		local HashPass = StrUtils.SHA1(oPass)
-		if fs.exists(cuserfile) then
-			local cpass = io.open(cuserfile, "r")
-			local cdataS = cpass:read() 
-			local cdata = textutils.unserialize(cdataS) 
-			local creadpassword = cdata.pass
-			local creadusername = cdata.user
-			local clevel = cdata.settings
-			cpass:close()
-			if userchange == creadusername and HashPass == creadpassword then
-				print("Please enter the new password.")
-				write("> ")
-				local newpass = read()
-				local newHashPass = StrUtils.SHA1(newpass)
-				local fileopen = io.open(cuserfile, "w") 
-				local passwrite = {pass = newHashPass, user = creadusername, settings = clevel} 
-				local dataS = textutils.serialize(passwrite) 
-				local writeIsFail = fileopen:write(dataS)
-				fileopen:close()
-				print("Password changed!")
-				sleep(1.5)
-				DOS.rawread(userType)
+			print("Please enter the original password.")
+			write("> ")
+			local oPass = read()
+			cuserfile = ("/users/"..userchange)
+			local HashPass = StrUtils.SHA1(oPass)
+			if fs.exists(cuserfile) then
+				local cpass = io.open(cuserfile, "r")
+				local cdataS = cpass:read() 
+				local cdata = textutils.unserialize(cdataS) 
+				local creadpassword = cdata.pass
+				local creadusername = cdata.user
+				local clevel = cdata.settings
+				cpass:close()
+				if userchange == creadusername and HashPass == creadpassword then
+					print("Please enter the new password.")
+					write("> ")
+					local newpass = read()
+					local newHashPass = StrUtils.SHA1(newpass)
+					local fileopen = io.open(cuserfile, "w") 
+					local passwrite = {pass = newHashPass, user = creadusername, settings = clevel} 
+					local dataS = textutils.serialize(passwrite) 
+					local writeIsFail = fileopen:write(dataS)
+					fileopen:close()
+					print("Password changed!")
+					sleep(1.5)
+					DOS.rawread("admin", tArgs[1])
+					else
+					print("Username or password was incorrect!")
+					sleep(1.5)
+					os.run({}, "admin", tArgs[1])
+					end
 				else
-				print("Username or password was incorrect!")
-				sleep(1.5)
-				os.run({}, userType)
+				print("That user doesn't exist!")
+				print("Please use the userchecker to list all users on the computer.")
+				sleep(2)
+				os.run({}, "admin", tArgs[1])
 				end
 			else
-			print("That user doesn't exist!")
-			print("Please use the userchecker to list all users on the computer.")
-			sleep(2)
-			os.run({}, userType)
+			print("Please enter a password")
+			DOS.rawread("admin", tArgs[1])
 			end
 		end
 DOS.rawread("admin", tArgs[1])

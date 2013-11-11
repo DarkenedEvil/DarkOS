@@ -10,6 +10,18 @@ function keychoose2(Knum1, Knum2, progrun1, progrun2, wrongrun)
 		end
 	end
 	
+--Function to return to a specific program when any key is pressed--
+function rawread(returnprog, username)
+	print("Press any key to return.")
+    bRead = true
+    while(bRead) do
+        local sEvent, param = os.pullEvent("key")
+        if(sEvent == "key") then
+            os.run({}, returnprog, username)
+        end
+    end
+end
+	
 	
 --Function to login users--		
 function login(username, password)
@@ -57,7 +69,7 @@ function login(username, password)
 
 	
 --Function to create an account--
-function usercreate(username, password, level)
+function usercreate(username, password, level, returnName)
 	local hashPass = StrUtils.SHA1(password)
 	local hashUser = username
 	local hashLevel = StrUtils.SHA1(level)
@@ -66,7 +78,7 @@ function usercreate(username, password, level)
 		if fs.exists(userfile) then
 			print("Sorry that username is already taken!")
 			sleep(1.5)
-			os.run({}, "admin")
+			os.run({}, "admin", returnName)
 			else
 			local fileopen = io.open(userfile, "w") 
 			local passwrite = {pass = hashPass, user = hashUser, settings = hashLevel} 
@@ -75,12 +87,12 @@ function usercreate(username, password, level)
 			fileopen:close() 
 			print("User made!") 
 			sleep(1.5)
-			os.run({}, "admin")
+			os.run({}, "admin", returnName)
 			end
 		else
-		print("Please enter a username")
+		print("Please enter a username"..returnName)
 		sleep(1.5)
-		os.run({}, "admin")
+		os.run({}, "admin", returnName)
 		end
 	end
 
@@ -98,7 +110,7 @@ function userdelete(dusername, password, username)
 		local readpassword = data.pass
 		local readusername = data.user
 		pass:close()
-		if hashUSer1 == readusername then
+		if hashUser1 == readusername then
 			print("You can't delete your own user silly!")
 			sleep(1.5)
 			os.run({}, userType)
@@ -131,16 +143,3 @@ function userdelete(dusername, password, username)
 		os.run({}, "admin")
 		end
 	end	
-	
-	
---Function to return to a specific program when any key is pressed--
-function rawread(returnprog)
-	print("Press any key to return.")
-    bRead = true
-    while(bRead) do
-        local sEvent, param = os.pullEvent("key")
-        if(sEvent == "key") then
-            os.run({}, returnprog)
-        end
-    end
-end
