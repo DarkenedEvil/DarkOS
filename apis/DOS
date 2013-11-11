@@ -1,4 +1,3 @@
-_G.shell = shell
 --Function to run a program if the correct key is pressed(2 keys)--
 function keychoose2(Knum1, Knum2, progrun1, progrun2, wrongrun)
 	local param = os.pullEvent("key")
@@ -14,35 +13,43 @@ function keychoose2(Knum1, Knum2, progrun1, progrun2, wrongrun)
 	
 --Function to login users--		
 function login(username, password)
-	local userfile = ("/users/"..username)
-	if fs.exists(userfile) then
-		local pass = io.open(userfile, "r")
-		local dataS = pass:read() 
-		local data = textutils.unserialize(dataS) 
-		local readpassword = data.pass
-		local readusername = data.user
-		local level = data.settings
-		pass:close()
-		if level == "admin" then
-			if readpassword == password and username == readusername then
-				os.run({}, "admin")
-				else
-				print("Wrong username or password!")
-				sleep(1.5)
-				os.run({}, "startup")
+	local hashPass = StrUtils.SHA1(password)
+	local hashUser = username
+	local userfile = ("/users/"..hashUser)
+	if userfile ~= "/users/" then
+		if fs.exists(userfile) then
+			local pass = io.open(userfile, "r")
+			local dataS = pass:read() 
+			local data = textutils.unserialize(dataS) 
+			local readpassword = data.pass
+			local readusername = data.user
+			local level = data.settings
+			pass:close()
+			if level == StrUtils.SHA1("admin") then
+				if readpassword == hashPass and hashUser == readusername then
+					os.run({}, "admin", username)
+					else
+					print("Wrong username or password!")
+					sleep(1.5)
+					os.run({}, "startup")
+					end
 				end
-		    end
-        if level == "user" then
-			if readpassword == password and username == readusername then
-				os.run({}, "Home")
-				else
-				print("Wrong username or password.")
-				sleep(1.5)
-				os.run({}, "startup")
+			if level == StrUtils.SHA1("user") then
+				if readpassword == hashPass and hashUser == readusername then
+					os.run({}, "Home", username)
+					else
+					print("Wrong username or password.")
+					sleep(1.5)
+					os.run({}, "startup")
+					end
 				end
+			else
+			print("User does not exist!")
+			sleep(1.5)
+			os.reboot()
 			end
 		else
-		print("User does not exist!")
+		print("User does not exist!1")
 		sleep(1.5)
 		os.reboot()
 		end
@@ -51,19 +58,27 @@ function login(username, password)
 	
 --Function to create an account--
 function usercreate(username, password, level)
-	local userfile = ("/users/"..username)
-	if fs.exists(userfile) then
-		print("Sorry that username is already taken!")
-		sleep(1.5)
-		os.run({}, "admin")
+	local hashPass = StrUtils.SHA1(password)
+	local hashUser = username
+	local hashLevel = StrUtils.SHA1(level)
+	local userfile = ("/users/"..hashUser)
+	if userfile ~= "/users/" then
+		if fs.exists(userfile) then
+			print("Sorry that username is already taken!")
+			sleep(1.5)
+			os.run({}, "admin")
+			else
+			local fileopen = io.open(userfile, "w") 
+			local passwrite = {pass = hashPass, user = hashUser, settings = hashLevel} 
+			local dataS = textutils.serialize(passwrite) 
+			local writeIsFail = fileopen:write(dataS) 
+			fileopen:close() 
+			print("User made!") 
+			sleep(1.5)
+			os.run({}, "admin")
+			end
 		else
-		io.open(userfile)
-		local fileopen = io.open(userfile, "w") 
-		local passwrite = {pass = password, user = username, settings = level} 
-		local dataS = textutils.serialize(passwrite) 
-		local writeIsFail = fileopen:write(dataS) 
-		fileopen:close() 
-		print("User made!") 
+		print("Please enter a username")
 		sleep(1.5)
 		os.run({}, "admin")
 		end
@@ -72,29 +87,32 @@ function usercreate(username, password, level)
 
 --Function to delete an account--
 function userdelete(dusername, password, username)
-	local userfile = ("/users/"..dusername)
+	local hashPass = StrUtils.SHA1(password)
+	local hashUser = dusername
+	local hashUser1 = username
+	local userfile = ("/users/"..hashUser)
 	if fs.exists(userfile) then
 		local pass = io.open(userfile, "r")
 		local dataS = pass:read() 
 		local data = textutils.unserialize(dataS) 
-		local readpassword = data.password 
+		local readpassword = data.pass
 		local readusername = data.user
 		pass:close()
-		if username == readusername then
+		if hashUSer1 == readusername then
 			print("You can't delete your own user silly!")
-			sleep(1)
-			os.run({}, "Home")
+			sleep(1.5)
+			os.run({}, userType)
 			else
-			if readpassword == password and dusername == readusername then
+			if readpassword == hashPass and hashUser == readusername then
 				print("Are you sure you want to delete the user?")
 				print("[Y] or [N]")
-				local param = os.pullEvent("key")
-				if param == 21 then
+				local event, param = os.pullEvent("char")
+				if param == "y" then
 				    fs.delete(userfile)
 					print("File deleted!")
 					sleep(1.5)
 					os.run({}, "admin")
-					elseif param == 49 then
+					elseif param == "n" then
 					os.run({}, "admin")
 					else
 					print("Please choose [Y] or [N].")

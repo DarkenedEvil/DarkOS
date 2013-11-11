@@ -1,0 +1,231 @@
+os.pullEvent = os.pullEventRaw
+
+local tArgs = {...}
+if #tArgs < 1 then
+	error("Expected Username but got less. Please report this to DarkenedEvil.")
+	DOS.rawread("admin", tArgs[1])
+end
+if #tArgs > 1 then
+	error("Expected Username but got more! Please report this to DarkenedEvil")
+	DOS.rawread("admin", tArgs[1])
+end
+
+local username = tArgs[1]
+
+local printcentred =
+	function(text)
+	local maxw, maxh = term.getSize() 
+	local curx, cury = term.getCursorPos()
+	term.setCursorPos((maxw-#text)/2,cury)
+	term.write(text)
+	term.setCursorPos(curx,cury+1)
+	end
+	local o = 1
+	while true do
+	 term.clear()
+	 term.setCursorPos(1,1)
+	 if o == 1 then
+		local maxw, maxh = term.getSize()
+		term.setBackgroundColor(colors.lightBlue)
+		term.clear()
+		term.setCursorPos(1,1)
+		term.setBackgroundColor(colors.black)
+		print("Press Delete to return")
+		term.setBackgroundColor(colors.lightBlue)
+		term.setCursorPos(1,math.floor(maxh/2))
+		printcentred("What would you like to do with users?")
+		term.setBackgroundColor(colors.blue)
+		printcentred(">Lookup users<")
+		term.setBackgroundColor(colors.lightBlue)
+		printcentred("Delete a user")
+		printcentred("Create a user")
+		printcentred("Change a password")
+	 elseif o == 2 then
+		local maxw, maxh = term.getSize()
+		term.setBackgroundColor(colors.lightBlue)
+		term.clear()
+		term.setCursorPos(1,1)
+		term.setBackgroundColor(colors.black)
+		print("Press Delete to return")
+		term.setBackgroundColor(colors.lightBlue)
+		term.setCursorPos(1,math.floor(maxh/2))
+		printcentred("What would you like to do with users?")
+		printcentred("Lookup users")
+		term.setBackgroundColor(colors.blue)
+		printcentred(">Delete a user<")
+		term.setBackgroundColor(colors.lightBlue)
+		printcentred("Create a user")
+		printcentred("Change a password")
+	 elseif o == 3 then
+		local maxw, maxh = term.getSize()
+		term.setBackgroundColor(colors.lightBlue)
+		term.clear()
+		term.setCursorPos(1,1)
+		term.setBackgroundColor(colors.black)
+		print("Press Delete to return")
+		term.setBackgroundColor(colors.lightBlue)
+		term.setCursorPos(1,math.floor(maxh/2))
+		printcentred("What would you like to do with users?")
+		printcentred("Lookup users")
+		printcentred("Delete a user")
+		term.setBackgroundColor(colors.blue)
+		printcentred(">Create a user<")
+		term.setBackgroundColor(colors.lightBlue)
+		printcentred("Change a password")
+	 elseif o == 4 then
+		local maxw, maxh = term.getSize()
+	 	term.setBackgroundColor(colors.lightBlue)
+		term.clear()
+		term.setCursorPos(1,1)
+		term.setBackgroundColor(colors.black)
+		print("Press Delete to return")
+		term.setBackgroundColor(colors.lightBlue)
+		term.setCursorPos(1,math.floor(maxh/2))
+		printcentred("What would you like to do with users?")
+		printcentred("Lookup users")
+		printcentred("Delete a user")
+		printcentred("Create a user")
+		term.setBackgroundColor(colors.blue)
+		printcentred(">Change a password<")
+		term.setBackgroundColor(colors.lightBlue)
+	 end
+	 _, key = os.pullEvent("key")
+	 if key == keys.up and o > 1 then
+	  o = o - 1
+	 elseif key == keys.down and o < 4 then
+	  o = o + 1
+	 elseif key == keys.up and o == 1 then
+	  o = 4
+	 elseif key == keys.down and o == 4 then
+	  o = 1
+	 elseif key == keys.delete then
+	  os.run({}, "admin")
+	 elseif key == keys.enter then
+	  break
+	 end
+	end
+if o == 2 then
+	print("Please enter YOUR username.")
+	write("> ")
+	local mainusername = read()
+	if mainusername == "" then
+		print("Please enter a username")
+		os.sleep(1.5)
+		os.run({}, "admin")
+		end
+	print("Please enter the user's username that you want to be deleted.")
+	write("> ")
+	local username = read()
+	print("Please enter the user's password to be deleted.")
+	write("> ")
+	local password = read("*")
+	DOS.userdelete(username, password, mainusername)
+		elseif o == 1 then
+		term.clear()
+		term.setCursorPos(1,1)
+		local FileList = fs.list("/users/")
+		for _, file in ipairs(FileList) do
+		print(_, ") ", file)
+		end
+		DOS.rawread("admin")
+		elseif o == 3 then
+		term.clear()	
+		term.setCursorPos(1,1)
+		print("Will this be an Admin [A] or a regular [R] user?")
+		local sEvent, param21 = os.pullEvent("char")
+			if sEvent == "char" then
+				if param21 == "a" then
+					print("Please make a username.")
+					write("> ")
+					local username = read()
+					print("Please make a password.")
+					write("> ")
+					local password = read()
+					print("Please confirm the password.")
+					write("> ")
+					local passmakecheck = read()
+					if password == passmakecheck then
+						DOS.usercreate(username, password, "admin")
+						else
+						print("Passwords didn't match!")
+						sleep(1.5)
+						os.run({}, userType)
+						end
+					elseif param21 == "r" then
+					print("Please make a username.")
+					write("> ")
+					local usermake = read()
+					print("Please make a password.")
+					write("> ")
+					local passmake = read()
+					print("Please confirm the password.")
+					write("> ")
+					local passmakecheck = read()
+					if passmake == passmakecheck then
+						DOS.usercreate(usermake, passmake, "user")
+						else
+						print("Passwords didn't match!")
+						sleep(1.5)
+						os.run({}, userType)
+						end
+					else
+					print("Please select [A] or [R].")
+					sleep(1.5)
+					os.run({}, userType)
+					end
+				else
+				print("ERROR")
+				end
+		elseif 0 == 4 then
+		term.clear()
+		term.setCursorPos(1,1)
+		print("Type in the name of the users password that you would like to change.")
+		print("Note:Admins can delete anyones password.")
+		write("> ")
+		local userchange = read()
+		if userchange ~= nil then
+		print("Please enter a username")
+		os.sleep(1.5)
+		os.run({}, userType)
+		else
+		print("nope")
+		end
+		print("Please enter the original password.")
+		write("> ")
+		local oPass = read()
+		cuserfile = ("/users/"..userchange)
+		local HashPass = StrUtils.SHA1(oPass)
+		if fs.exists(cuserfile) then
+			local cpass = io.open(cuserfile, "r")
+			local cdataS = cpass:read() 
+			local cdata = textutils.unserialize(cdataS) 
+			local creadpassword = cdata.pass
+			local creadusername = cdata.user
+			local clevel = cdata.settings
+			cpass:close()
+			if userchange == creadusername and HashPass == creadpassword then
+				print("Please enter the new password.")
+				write("> ")
+				local newpass = read()
+				local newHashPass = StrUtils.SHA1(newpass)
+				local fileopen = io.open(cuserfile, "w") 
+				local passwrite = {pass = newHashPass, user = creadusername, settings = clevel} 
+				local dataS = textutils.serialize(passwrite) 
+				local writeIsFail = fileopen:write(dataS)
+				fileopen:close()
+				print("Password changed!")
+				sleep(1.5)
+				DOS.rawread(userType)
+				else
+				print("Username or password was incorrect!")
+				sleep(1.5)
+				os.run({}, userType)
+				end
+			else
+			print("That user doesn't exist!")
+			print("Please use the userchecker to list all users on the computer.")
+			sleep(2)
+			os.run({}, userType)
+			end
+		end
+DOS.rawread("admin", tArgs[1])

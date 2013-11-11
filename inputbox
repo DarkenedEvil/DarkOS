@@ -1,6 +1,4 @@
---os.pullEvent = os.pullEventRaw
-if term.isColor() then
-		os.loadAPI("/apis/DOS")
+	os.loadAPI("/apis/DOS")
 	os.loadAPI("/apis/StrUtils")
 	local printcentred =
 	function(text)
@@ -48,21 +46,18 @@ if term.isColor() then
 	while true do
 	local event, button, x, y = os.pullEvent()
 	if event == "mouse_click" then
+		local username = ""
+		local password = ""
 		if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
 			term.setBackgroundColor(colors.lightGray)
 			term.setCursorPos(18, 12)
 			username = read()
-			term.setBackgroundColor(colors.lightBlue)
 			elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
 			term.setBackgroundColor(colors.lightGray)
 			term.setCursorPos(18, 14)
 			password = read("*")
-			term.setBackgroundColor(colors.lightBlue)
 			elseif x >= 21 and x <= 28 and y == 16 and button == 1 then --loginbutton
 			DOS.login(username, password)
 			end
 		end
 	end
-	else
-	print("You must be using an adv.Computer")
-end

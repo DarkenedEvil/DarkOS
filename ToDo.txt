@@ -1,0 +1,14 @@
+Todo
+-fix EVERYTHING
+-branch most things into separate programs
+-finish usercontrol program(Biggest change in code I think)
+-finish login program ~Add username check before asking for password
+-Come up with a way to make a "return" button which returns to the previous program
+-Come up with a way to differentiate between the two sessions (admin or regular user)
+-Settings and locale?
+-file browsing and/or program browsing with the ability to remove programs from that list for security
+-Look at updater
+-change version
+-fix syntax/code etc.
+-Make a GUI version?
+-Much more
