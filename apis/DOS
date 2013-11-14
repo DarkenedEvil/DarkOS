@@ -113,7 +113,7 @@ function userdelete(dusername, password, username)
 		if hashUser1 == readusername then
 			print("You can't delete your own user silly!")
 			sleep(1.5)
-			os.run({}, userType)
+			os.run({}, "admin", username)
 			else
 			if readpassword == hashPass and hashUser == readusername then
 				print("Are you sure you want to delete the user?")
@@ -122,24 +122,25 @@ function userdelete(dusername, password, username)
 				if param == "y" then
 				    fs.delete(userfile)
 					print("File deleted!")
+					print(username)
 					sleep(1.5)
-					os.run({}, "admin")
+					os.run({}, "admin", username)
 					elseif param == "n" then
-					os.run({}, "admin")
+					os.run({}, "admin", username)
 					else
 					print("Please choose [Y] or [N].")
 					sleep(1.5)
-					os.run({}, "admin")                
+					os.run({}, "admin", username)                
 					end
 				else
 				print("Incorrect password or username!")
 				sleep(1.5)
-				os.run({}, "admin")
+				os.run({}, "admin", username)
 				end
 			end			
 		else
 		print("That user doesn't exist!")
 		sleep(1.5)
-		os.run({}, "admin")
+		os.run({}, "admin", username)
 		end
 	end	

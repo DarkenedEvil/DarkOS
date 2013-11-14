@@ -138,8 +138,7 @@ if event == "mouse_click" then
 		drawBackGround()
 		end
 		if x >= 37 and x <= 45 and y >= 5 and y <= 15 and button == 1 then --Usercontrol
-			drawAlert("Comming Soon")
-			--os.run({}, "usercontrol", tArgs[1])
+			os.run({}, "usercontrol", tArgs[1])
 			elseif x >= 1 and x <= 8 and y <=8 and y >= 7 and button == 1  then --FileBrowser
 			os.run({}, "filebrowser")
 			elseif x >=1 and x <= 8 and y <=5 and y >=4 and button == 1 then --AppCenter
