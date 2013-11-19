@@ -32,8 +32,8 @@ function drawDropDown()
 	print("         ")
 	print("Update   ")
 	print("Settings ")
-	print("Shell    ")
 	print("About    ")
+	print("Credits  ")
 	print("Logout   ")
 	print("Shutdown ")
 	print("         ")
@@ -47,6 +47,22 @@ function drawUIcon()
 	print(" User Control")
 end
 
+function drawShellIconBlinkOne()
+	shellIcon = paintutils.loadImage("shell.icon")
+	paintutils.drawImage(shellIcon,1,1)
+	term.setCursorPos(15,6)
+	term.setBackgroundColor(colors.gray)
+	print("> Shell")
+end
+
+function drawShellIconBlinkTwo()
+	shellIcon = paintutils.loadImage("shell.icon")
+	paintutils.drawImage(shellIcon,1,1)
+	term.setCursorPos(15,6)
+	term.setBackgroundColor(colors.gray)
+	print("  Shell")
+end
+
 function drawTaskBar()
 	term.setBackgroundColor(colors.lightGray)
 	term.setCursorPos(1,2)
@@ -56,7 +72,9 @@ function drawTaskBar()
 	print("Center  ")
 	term.setCursorPos(1,7)
 	print("File    ")
-	print("Browser ")	
+	print("Browser ")
+	term.setCursorPos(1, 10)
+	print("LuaIDE  ")
 end
 
 function drawAlert(text)
@@ -84,7 +102,19 @@ function drawAbout()
 	term.setCursorPos(13, 12)
 	print("Version 0.0.1")
 	
-end	
+end
+
+function drawCredits()
+	creditUI = paintutils.loadImage("credits.page")
+	paintutils.drawImage(creditUI,1,1)
+	term.setBackgroundColor(colors.red)
+	term.setCursorPos(46,5)
+	print("X")
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(13,6)
+	print("Credit where credit is due")
+	term.setCursorPos(13,7)
+end
 
 function drawBackGround()
 	term.clear()
@@ -93,25 +123,47 @@ function drawBackGround()
 	backGround = paintutils.loadImage(".background")
 	paintutils.drawImage(backGround,1,1)
 	Header()
-	drawUIcon()
 	drawTaskBar()
+	drawUIcon()	
+	drawShellIconBlinkOne()
 end
 drawBackGround()
+local blink = 1
 while true do
 local event, button, x, y = os.pullEvent()
+--[[os.startTimer(.5)
+local event, button, x, y = os.pullEvent()
+if blink == 1 then
+	drawShellIconBlinkOne()
+	blink = blink + 1
+elseif blink == 2 then
+	drawShellIconBlinkTwo()
+	blink = blink - 1
+else
+	error("Unknown blink. Please report this to DarkenedEvil")
+end--]]
 if event == "mouse_click" then
 	if x >= 3 and x <= 8 and y == 1 and button == 1 then --DropDown
 		drawDropDown()
 		while true do
 			local event, button, x, y = os.pullEvent()
+			--[[os.startTimer(.5)
+			local event, button, x, y = os.pullEvent()
+			if blink == 1 then
+				drawShellIconBlinkOne()
+				blink = blink + 1
+			elseif blink == 2 then
+				drawShellIconBlinkTwo()
+				blink = blink - 1
+			else
+				error("Unknown blink. Please report this to DarkenedEvil")
+			end--]]
 			if event == "mouse_click" then
 				if x >= 1 and x <= 8 and y == 3 and button == 1 then --Update
 					--os.run({}, "update")
 					elseif x >= 1 and x <= 8 and y == 4 and button == 1 then --Settings
 					
-					elseif x >= 1 and x <= 8 and y == 5 and button == 1 then --Shell
-					
-					elseif x >= 1 and x <= 8 and y == 6 and button == 1 then --about
+					elseif x >= 1 and x <= 8 and y == 5 and button == 1 then --about
 					drawBackGround()
 					drawAbout()
 					while true do
@@ -124,33 +176,47 @@ if event == "mouse_click" then
 						end
 					end
 					break
+					elseif x >= 1 and x <= 8 and y == 6 and button == 1 then --credits
+					drawBackGround()
+					drawCredits()
+					while true do
+						local event, button, x, y = os.pullEvent()
+						if event == "mouse_click" then
+							if x == 46 and y == 5 and button == 1 then --close box
+								drawBackGround()
+								break
+							end
+						end
+					end
+					break
 					elseif x >= 1 and x <= 8 and y == 7 and button == 1 then --Logout
 					os.reboot()
-					elseif x >= 1 and x <= 8 and y == 8 and button == 1 then --Shutdown
+					elseif x >= 1 and x <= 8 and y == 8 and button == 1 then --shutdown
 					os.shutdown()
-					elseif x >= 1 and x <= 7 and y == 1 and button == 1 then
+ 					elseif x >= 1 and x <= 7 and y == 1 and button == 1 then
 					drawBackGround()
 					break
 				end
 			end
 		end
-		else
-		drawBackGround()
-		end
+	end
 		if x >= 37 and x <= 45 and y >= 5 and y <= 15 and button == 1 then --Usercontrol
 			os.run({}, "usercontrol", tArgs[1])
 			elseif x >= 1 and x <= 8 and y <=8 and y >= 7 and button == 1  then --FileBrowser
 			os.run({}, "filebrowser")
+			elseif x >= 13 and x <= 25 and y <= 15 and y >= 4 and button == 1 then --Shell
+			--os.run({}, "shell", username)
+			os.run({},"shell", username)
+			elseif x >= 1 and x <= 8 and y <= 10 and y >= 10 and button == 1 then --LuaIDE
+			os.run({["shell"] = shell}, "luaide", "luaide", username)
 			elseif x >=1 and x <= 8 and y <=5 and y >=4 and button == 1 then --AppCenter
-				if Alert == true then
-					drawBackGround()
-					Alert = false
-					else
-					drawAlert("Comming Soon!")
-					Alert = true
-					end
+			if Alert == true then
+				drawBackGround()
+				Alert = false
 			else
-			--drawBackGround()
+				drawAlert("Comming Soon!")
+				Alert = true
+			end
 		end
 	end
 end

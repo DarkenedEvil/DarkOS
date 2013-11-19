@@ -90,7 +90,7 @@ function usercreate(username, password, level, returnName)
 			os.run({}, "admin", returnName)
 			end
 		else
-		print("Please enter a username"..returnName)
+		print("Please enter a username ")
 		sleep(1.5)
 		os.run({}, "admin", returnName)
 		end
