@@ -1,6 +1,6 @@
 --os.pullEvent = os.pullEventRaw
 if term.isColor() then
-		os.loadAPI("/apis/DOS")
+	os.loadAPI("/apis/DOS")
 	os.loadAPI("/apis/StrUtils")
 	local printcentred =
 	function(text)
@@ -16,7 +16,7 @@ if term.isColor() then
 		term.setBackgroundColor(colors.black)
 		print("DarkOS 0.0.1")
 		term.setBackgroundColor(colors.lightBlue)
-		backGround = paintutils.loadImage("Title.background")
+		backGround = paintutils.loadImage("/sys/Images/Title.background")
 		paintutils.drawImage(backGround,1,1)
 	end
 	

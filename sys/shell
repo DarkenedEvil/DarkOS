@@ -8,7 +8,7 @@ local tCommandHistory = {}
 local tEnv = {
 	["exit"] = function()
 		--bRunning = false
-		os.run({}, "admin", returnName)
+		os.run({}, "/sys/admin", returnName)
 	end,
 }
 setmetatable( tEnv, { __index = getfenv() } )

@@ -7,3 +7,4 @@ Todo
 -Find fix for LuaIDE
 -Credits for all program developers
 -Live username checking in login page
+-Add salt(Better security)

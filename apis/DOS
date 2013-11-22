@@ -39,7 +39,7 @@ function login(username, password)
 			pass:close()
 			if level == StrUtils.SHA1("admin") then
 				if readpassword == hashPass and hashUser == readusername then
-					os.run({}, "admin", username)
+					os.run({}, "/sys/admin", username)
 					else
 					print("Wrong username or password!")
 					sleep(1.5)
@@ -48,7 +48,7 @@ function login(username, password)
 				end
 			if level == StrUtils.SHA1("user") then
 				if readpassword == hashPass and hashUser == readusername then
-					os.run({}, "Home", username)
+					os.run({}, "/sys/Home", username)
 					else
 					print("Wrong username or password.")
 					sleep(1.5)
@@ -78,7 +78,7 @@ function usercreate(username, password, level, returnName)
 		if fs.exists(userfile) then
 			print("Sorry that username is already taken!")
 			sleep(1.5)
-			os.run({}, "admin", returnName)
+			os.run({}, "/sys/admin", returnName)
 			else
 			local fileopen = io.open(userfile, "w") 
 			local passwrite = {pass = hashPass, user = hashUser, settings = hashLevel} 
@@ -87,12 +87,12 @@ function usercreate(username, password, level, returnName)
 			fileopen:close() 
 			print("User made!") 
 			sleep(1.5)
-			os.run({}, "admin", returnName)
+			os.run({}, "/sys/admin", returnName)
 			end
 		else
 		print("Please enter a username ")
 		sleep(1.5)
-		os.run({}, "admin", returnName)
+		os.run({}, "/sys/admin", returnName)
 		end
 	end
 
@@ -113,7 +113,7 @@ function userdelete(dusername, password, username)
 		if hashUser1 == readusername then
 			print("You can't delete your own user silly!")
 			sleep(1.5)
-			os.run({}, "admin", username)
+			os.run({}, "/sys/admin", username)
 			else
 			if readpassword == hashPass and hashUser == readusername then
 				print("Are you sure you want to delete the user?")
@@ -130,17 +130,17 @@ function userdelete(dusername, password, username)
 					else
 					print("Please choose [Y] or [N].")
 					sleep(1.5)
-					os.run({}, "admin", username)                
+					os.run({}, "/sys/admin", username)                
 					end
 				else
 				print("Incorrect password or username!")
 				sleep(1.5)
-				os.run({}, "admin", username)
+				os.run({}, "/sys/admin", username)
 				end
 			end			
 		else
 		print("That user doesn't exist!")
 		sleep(1.5)
-		os.run({}, "admin", username)
+		os.run({}, "/sys/admin", username)
 		end
 	end	

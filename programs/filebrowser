@@ -227,7 +227,7 @@ for a = 1, #tArgs do
 		elseif cmd == "all" then
 			showAll = true
 		elseif cmd == "update" then
-			update()
+			--update()
 		end
 	elseif tArgs[a]:sub(1,1) == "-" then
 		for b = 2, #tArgs[a] do
@@ -1236,7 +1236,7 @@ local function fileSelect(mode) -- save_file open_file browse < not yet implemen
 				end
 			elseif event[2] == 1 and event[3] == exitX and event[4] == exitY then
 				if dialogBox("Confirm","Exit application",{"yes","no"}) == 1 then
-					bRun = false
+					os.run({}, "/sys/admin", returnName)--WHEN UPDATING DONT FORGET TO FIX THIS!!!!!-Note to self:D
 				end
 				flag = true
 			elseif event[2] == 1 then

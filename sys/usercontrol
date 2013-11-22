@@ -99,7 +99,7 @@ local printcentred =
 	 elseif key == keys.down and o == 4 then
 	  o = 1
 	 elseif key == keys.delete then
-	  os.run({}, "admin", returnName)
+	  os.run({}, "/sys/admin", returnName)
 	 elseif key == keys.enter then
 	  break
 	 end
@@ -166,7 +166,7 @@ if o == 2 then
 			term.setBackgroundColor(colors.lightBlue)
 		end
 		elseif key == keys.delete then
-		os.run({}, "usercontrol", returnName)
+		os.run({}, "/sys/usercontrol", returnName)
 	end
 		
 	local event, button, x, y = os.pullEvent()
@@ -219,11 +219,11 @@ if o == 2 then
 								while(bRead) do
 									local sEvent, param = os.pullEvent("key")
 									if(sEvent == "key") then
-										os.run({}, "admin", tArgs[1])
+										os.run({}, "/sys/admin", tArgs[1])
 									end
 								end
 								elseif param == "n" then
-								os.run({}, "usercontrol", returnName)
+								os.run({}, "/sys/usercontrol", returnName)
 								else
 								print("Please choose [Y] or [N].")
 								sleep(1.5)           
@@ -246,7 +246,7 @@ end
 		term.setCursorPos(1,1)
 		local FileList = fs.list("/users/")
 		textutils.tabulate(FileList)
-		DOS.rawread("usercontrol", tArgs[1])
+		DOS.rawread("/sys/usercontrol", tArgs[1])
 		elseif o == 3 then
 		while true do
 			term.clear()
@@ -329,21 +329,21 @@ end
 					fileopen:close()
 					print("Password changed!")
 					sleep(1.5)
-					DOS.rawread("admin", tArgs[1])
+					DOS.rawread("/sys/admin", tArgs[1])
 					else
 					print("Username or password was incorrect!")
 					sleep(1.5)
-					os.run({}, "admin", tArgs[1])
+					os.run({}, "/sys/admin", tArgs[1])
 					end
 				else
 				print("That user doesn't exist!")
 				print("Please use the userchecker to list all users on the computer.")
 				sleep(2)
-				os.run({}, "admin", tArgs[1])
+				os.run({}, "/sys/admin", tArgs[1])
 				end
 			else
 			print("Please enter a password")
-			DOS.rawread("admin", tArgs[1])
+			DOS.rawread("/sys/admin", tArgs[1])
 			end
 		end
 DOS.rawread("admin", tArgs[1])

@@ -1,0 +1,109 @@
+term.clear()
+term.setCursorPos(1,1)
+if not term.isColor() then
+print("To use this version of DarkOS you need an adv.Computer!")
+end
+function printCen(msg)
+	msgLen = string.len(msg)
+	screenWidth,_ = term.getSize()
+	xCoords = tonumber(math.ceil((screenWidth / 2) - (msgLen / 2)))
+	_,termY = term.getCursorPos()
+	term.setCursorPos(xCoords,termY)
+	print(msg)
+end
+
+function download()
+	local fileList = {
+        ".init",
+        "compositor",
+        "debug",
+        "desktop",
+        "env",
+        "framebuffer",
+        "kill",
+        "LICENSE",
+        "lrnd",
+        "lws",
+        "menu",
+        "process",
+        "procman",
+        "ps",
+        "service",
+        "start",
+        "window",
+}
+	for _, file in ipairs(fileList) do
+		print("Fetching file: "..file)
+		local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/"..file)
+		if remoteHandle then
+			fileHandle = io.open("/LyqydOS/"..file, "w")
+			if fileHandle then
+				fileHandle:write(remoteHandle.readAll())
+				fileHandle:close()
+			else
+				error("Could not open file /LyqydOS/"..file)
+			end
+		else
+			error("Could not retrieve remote file: "..file)
+		end
+	end
+end	
+
+print("Do you want to install DarkOS onto this computer?")
+print("[Y] or [N]")
+local e, key = os.pullEvent()
+if e == "key" then
+	if key == keys.y then
+		print("Installation Complete!")
+					print("Now please make an admin account")
+					sleep(1.5)
+					term.clear()
+					term.setCursorPos(1,1)
+					print("Please enter your wanted username.")
+					write("> ")
+					local username = read()
+					print("Please enter your wanted password.")
+					write("> ")
+					local password = read()
+					print("Please confirm your password.")
+					write("> ")
+					local passconfirm = read()
+					if password == passconfirm then
+						local userfile = ("/users/"..username)
+						if fs.exists(userfile) then
+							print("Sorry that username is already taken!")
+							sleep(1.5)
+							shell.run("setup")
+							else
+							term.clear()
+							term.setCursorPos(1,1)
+							io.open(userfile)
+							local fileopen = io.open(userfile, "w") 
+							local passwrite = {pass = password, user = username, settings = "admin"} 
+							local dataS = textutils.serialize(passwrite) 
+							local writeIsFail = fileopen:write(dataS) 
+							fileopen:close()
+							print("DarkOS sucessfully installed and admin account sucessfully created!")
+							print("Enjoy DarkOS, and remember to check the update checker often for new releases.")
+							sleep(3)
+							shell.run("startup")
+							end
+						else
+						print("Passwords didn't match please restart the setup program.")
+						sleep(1.5)
+						os.reboot()
+						end	
+					end	
+				elseif param == 49 then
+				print("Ok. Restarting computer.")
+				sleep(1.5)
+				os.reboot()
+				else
+				print("Please select [Y] or [N]!")
+				sleep(1.5)
+				os.reboot()
+				end
+					
+			else
+			print("Error!")
+			end
