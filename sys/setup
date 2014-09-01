@@ -1,8 +1,13 @@
+os.pullEvent = os.pullEventRaw
+_G.shell = shell
 term.clear()
 term.setCursorPos(1,1)
 if not term.isColor() then
 print("To use this version of DarkOS you need an adv.Computer!")
 end
+
+local fileName = shell.getRunningProgram()
+
 function printCen(msg)
 	msgLen = string.len(msg)
 	screenWidth,_ = term.getSize()
@@ -14,96 +19,308 @@ end
 
 function download()
 	local fileList = {
-        ".init",
-        "compositor",
-        "debug",
-        "desktop",
-        "env",
-        "framebuffer",
-        "kill",
-        "LICENSE",
-        "lrnd",
-        "lws",
-        "menu",
-        "process",
-        "procman",
-        "ps",
-        "service",
-        "start",
-        "window",
+        "apis/DOS",
+        "apis/StrUtils",
+        "startup",
+        "sys/admin",
+        "sys/Home",
+        "sys/info",
+        "sys/shell",
+        "sys/uninstall",
+        "sys/update",
+        "sys/usercontrol",
+        "sys/Images/.background",
+        "sys/Images/Title.background",
+        "sys/Images/about.page",
+        "sys/Images/credits.page",
+        "sys/Images/shell.icon",
+        "sys/Images/u.icon",
+        "programs/filebrowser",
+		"programs/luaide",
 }
+stats = 0
+local function addStatus()
+	term.clear()
+	term.setCursorPos(1,1)
+	stats = stats + 1
+	if stats == 1 then
+		statusBar = "[X                   ]"
+		print(statusBar)
+	elseif stats == 2 then
+		statusBar = "[XX                  ]"
+		print(statusBar)
+	elseif stats  == 3 then
+		statusBar = "[XXX                 ]"
+		print(statusBar)
+	elseif stats  == 4 then
+		statusBar = "[XXXX                ]"
+		print(statusBar)
+	elseif stats  == 5 then
+		statusBar = "[XXXXX               ]"
+		print(statusBar)
+	elseif stats  == 6 then
+		statusBar = "[XXXXXX              ]"
+		print(statusBar)
+	elseif stats  == 7 then
+		statusBar = "[XXXXXXX             ]"
+		print(statusBar)
+	elseif stats  == 8 then
+		statusBar = "[XXXXXXXX            ]"
+		print(statusBar)
+	elseif stats  == 9 then
+		statusBar = "[XXXXXXXXX           ]"
+		print(statusBar)
+	elseif stats  == 10 then
+		statusBar = "[XXXXXXXXXX          ]"
+		print(statusBar)
+	elseif stats  == 11 then
+		statusBar = "[XXXXXXXXXXX         ]"
+		print(statusBar)
+	elseif stats  == 12 then
+		statusBar = "[XXXXXXXXXXXX        ]"
+		print(statusBar)
+	elseif stats  == 13 then
+		statusBar = "[XXXXXXXXXXXXX       ]"
+		print(statusBar)
+	elseif stats  == 14 then
+		statusBar = "[XXXXXXXXXXXXXX      ]"
+		print(statusBar)
+	elseif stats  == 15 then
+		statusBar = "[XXXXXXXXXXXXXXX     ]"
+		print(statusBar)
+	elseif stats  == 16 then
+		statusBar = "[XXXXXXXXXXXXXXXX    ]"
+		print(statusBar)
+	elseif stats  == 17 then
+		statusBar = "[XXXXXXXXXXXXXXXXX   ]"
+		print(statusBar)
+	elseif stats  == 18 then
+		statusBar = "[XXXXXXXXXXXXXXXXXX  ]"
+		print(statusBar)
+	elseif stats  == 19 then
+		statusBar = "[XXXXXXXXXXXXXXXXXXX ]"
+		print(statusBar)
+	elseif stats  == 20 then
+		statusBar = "[XXXXXXXXXXXXXXXXXXXX]"
+		print(statusBar)
+	end
+end
 	for _, file in ipairs(fileList) do
-		print("Fetching file: "..file)
+		--print("Downloading: "..file)
 		local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/"..file)
 		if remoteHandle then
-			fileHandle = io.open("/LyqydOS/"..file, "w")
-			if fileHandle then
-				fileHandle:write(remoteHandle.readAll())
-				fileHandle:close()
+			if file == "startup" then
+				fileHandle = io.open(file, "w")
+				if fileHandle then
+					fileHandle:write(remoteHandle.readAll())
+					fileHandle:close()
+					addStatus()
+				else
+					error("Could not open:"..file)
+				end
 			else
-				error("Could not open file /LyqydOS/"..file)
+				fileHandle = io.open("/"..file, "w")
+				if fileHandle then
+					fileHandle:write(remoteHandle.readAll())
+					fileHandle:close()
+					addStatus()
+				else
+					error("Could not open:"..file)
+				end
 			end
 		else
-			error("Could not retrieve remote file: "..file)
+			error("Could not download."..file)
 		end
 	end
-end	
-
-print("Do you want to install DarkOS onto this computer?")
-print("[Y] or [N]")
-local e, key = os.pullEvent()
-if e == "key" then
-	if key == keys.y then
-		print("Installation Complete!")
-					print("Now please make an admin account")
-					sleep(1.5)
-					term.clear()
-					term.setCursorPos(1,1)
-					print("Please enter your wanted username.")
-					write("> ")
-					local username = read()
-					print("Please enter your wanted password.")
-					write("> ")
-					local password = read()
-					print("Please confirm your password.")
-					write("> ")
-					local passconfirm = read()
-					if password == passconfirm then
-						local userfile = ("/users/"..username)
-						if fs.exists(userfile) then
-							print("Sorry that username is already taken!")
-							sleep(1.5)
-							shell.run("setup")
-							else
-							term.clear()
-							term.setCursorPos(1,1)
-							io.open(userfile)
-							local fileopen = io.open(userfile, "w") 
-							local passwrite = {pass = password, user = username, settings = "admin"} 
+	print("All files downloaded")
+end
+while true do
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Do you want to install DarkOS onto this computer?")
+	print("[Y] or [N]")
+	local e, key = os.pullEvent()
+	if e == "key" then
+		if key == keys.y then
+			fs.makeDir("apis")
+			fs.makeDir("programs")
+			fs.makeDir("sys")
+			fs.makeDir("sys/Images")
+			fs.makeDir("users")
+			download()
+			installed = true
+			break
+		elseif key == keys.n then
+			print("Ok :( rebooting")
+			sleep(1.5)
+			os.reboot()
+		else
+		print("Please select Yes[Y] or No[N]")
+		os.sleep(1.5)
+		end
+	end
+end
+if installed == true then
+	os.loadAPI("/apis/DOS")
+	os.loadAPI("/apis/StrUtils")
+	local function printcentred(text)
+		local maxw, maxh = term.getSize() 
+		local curx, cury = term.getCursorPos()
+		term.setCursorPos((maxw-#text)/2,cury)
+		term.write(text)
+		term.setCursorPos(curx,cury+1)
+	end
+	
+	function drawTitle()
+		term.clear()
+		term.setCursorPos(1,1)
+		term.setBackgroundColor(colors.black)
+		print("DarkOS 0.1.0")
+		term.setBackgroundColor(colors.lightBlue)
+		backGround = paintutils.loadImage("/sys/Images/Title.background")
+		paintutils.drawImage(backGround,1,1)
+	end
+	
+	function drawScreen()
+		term.setBackgroundColor(colors.lightBlue)
+		term.clear()
+		term.setCursorPos(1,1)
+		drawTitle()
+		term.setBackgroundColor(colors.lightBlue)
+		local maxw, maxh = term.getSize()
+		term.setCursorPos(1,math.floor(maxh/2))
+		printcentred("Create the admin account.")
+		printcentred("             ")
+		printcentred("Username:")
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
+		term.setBackgroundColor(colors.lightBlue)
+		printcentred("Password:")
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
+		term.setBackgroundColor(colors.lightBlue)
+		printcentred("Re-Enter Password:")
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
+		term.setBackgroundColor(colors.lightBlue)
+		printcentred("             ")
+		printcentred("[Create]")
+	end
+	
+	function drawUserBox()
+		term.setCursorPos(1, 12)
+		term.setBackgroundColor(colors.lightBlue)
+		term.clearLine()
+		term.setCursorPos(18, 12)
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
+	end
+	
+	function drawPassBox()
+		term.setCursorPos(1, 14)
+		term.setBackgroundColor(colors.lightBlue)
+		term.clearLine()
+		term.setCursorPos(18, 14)
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
+	end
+	
+	function drawPassCheckBox()
+		term.setCursorPos(1, 16)
+		term.setBackgroundColor(colors.lightBlue)
+		term.clearLine()
+		term.setCursorPos(18, 16)
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
+	end
+	
+	drawScreen()
+	while true do
+		
+		local event, key = os.pullEvent()
+		if key == keys.tab then
+			if tabs == "password" then
+				drawPassBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 14)
+				password = read("*")
+				tabs = "passCheck"
+				term.setBackgroundColor(colors.lightBlue)
+			elseif tabs == "passCheck" then
+				drawPassCheckBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 16)
+				passCheck = read("*")
+				term.setBackgroundColor(colors.lightBlue)
+			end
+		end
+			
+		local event, button, x, y = os.pullEvent()
+		if event == "mouse_click" then
+			if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
+				drawUserBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 12)
+				username = read()
+				tabs = "password"
+				term.setBackgroundColor(colors.lightBlue)
+			elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
+				drawPassBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 14)
+				password = read("*")
+				tabs = "passCheck"
+				term.setBackgroundColor(colors.lightBlue)
+			elseif x >= 18 and x <= 31 and y == 16 and button == 1 then --passwordcheck
+				drawPassCheckBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 16)
+				passCheck = read("*")
+				term.setBackgroundColor(colors.lightGray)				
+			elseif x >= 21 and x <= 28 and y == 18 and button == 1 then --loginbutton
+				if password == passCheck then
+					local userfile = ("/users/"..username)
+					if fs.exists(userfile) then
+						term.setBackgroundColor(colors.red)
+						printcentred("Sorry that username is already taken!")
+						term.setBackgroundColor(colors.lightBlue)
+						os.sleep(1.5)
+					else
+						term.setBackgroundColor(colors.lightBlue)
+						term.clear()
+						term.setCursorPos(1,1)
+						drawTitle()
+						local fileopen = io.open(userfile, "w")
+						local hashPass = StrUtils.SHA1(password)
+						local hashSetting = StrUtils.SHA1("admin")
+						if fileopen then
+							local passwrite = {pass = hashPass, user = username, settings = hashSetting} 
 							local dataS = textutils.serialize(passwrite) 
 							local writeIsFail = fileopen:write(dataS) 
 							fileopen:close()
-							print("DarkOS sucessfully installed and admin account sucessfully created!")
-							print("Enjoy DarkOS, and remember to check the update checker often for new releases.")
-							sleep(3)
-							shell.run("startup")
-							end
+							fs.delete(fileName)
+							printcentred("Thank you for choosing DarkOS!")
+							printcentred("You may now login")
+							sleep(1.5)
+							os.reboot()
 						else
-						print("Passwords didn't match please restart the setup program.")
-						sleep(1.5)
-						os.reboot()
-						end	
-					end	
-				elseif param == 49 then
-				print("Ok. Restarting computer.")
-				sleep(1.5)
-				os.reboot()
+							term.setBackgroundColor(colors.red)
+							printcentred("Unable to open file:"..userfile)
+							term.setBackgroundColor(colors.lightBlue)
+							sleep(1.5)
+						end
+					end
 				else
-				print("Please select [Y] or [N]!")
-				sleep(1.5)
-				os.reboot()
+					term.setBackgroundColor(colors.red)
+					printcentred("Passwords did not match")
+					term.setBackgroundColor(colors.lightBlue)
+					sleep(1.5)
 				end
-					
-			else
-			print("Error!")
 			end
+		end
+	end
+else
+	print("Not fully installed please re-run installer")
+	os.sleep(3)
+	shell.run(fileName)
+end

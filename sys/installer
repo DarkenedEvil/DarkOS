@@ -1,0 +1,7 @@
+os.pullEvent = os.pullEventRaw
+_G.shell = shell --This is here because of an odd bug where sometimes shell.run wouldn't work. You may see this in other parts of the OS aswell
+if term.isColor() then --checking to see if computer is adv.
+	
+else
+	print("DarkOS only works on Advanced Computers!")
+end

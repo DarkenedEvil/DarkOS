@@ -1,20 +1,20 @@
---os.pullEvent = os.pullEventRaw
-if term.isColor() then
+os.pullEvent = os.pullEventRaw
+_G.shell = shell --This is here because of an odd bug where sometimes shell.run wouldn't work. You may see this in other parts of the OS aswell
+if term.isColor() then --checking to see if computer is adv.
 	os.loadAPI("/apis/DOS")
 	os.loadAPI("/apis/StrUtils")
-	local printcentred =
-	function(text)
-	local maxw, maxh = term.getSize() 
-	local curx, cury = term.getCursorPos()
-	term.setCursorPos((maxw-#text)/2,cury)
-	term.write(text)
-	term.setCursorPos(curx,cury+1)
+	function printcentred(text)
+		local maxw, maxh = term.getSize() 
+		local curx, cury = term.getCursorPos()
+		term.setCursorPos((maxw-#text)/2,cury)
+		term.write(text)
+		term.setCursorPos(curx,cury+1)
 	end
 	function drawTitle()
 		term.clear()
 		term.setCursorPos(1,1)
 		term.setBackgroundColor(colors.black)
-		print("DarkOS 0.0.1")
+		print("DarkOS 0.1.0")
 		term.setBackgroundColor(colors.lightBlue)
 		backGround = paintutils.loadImage("/sys/Images/Title.background")
 		paintutils.drawImage(backGround,1,1)
@@ -52,52 +52,72 @@ if term.isColor() then
 	end
 	
 	function drawPassBox()
+	term.setCursorPos(1, 14)
+	term.setBackgroundColor(colors.lightBlue)
+	term.clearLine()
 	term.setCursorPos(18, 14)
 	term.setBackgroundColor(colors.lightGray)
 	printcentred("              ")
 	end
 	
 	drawScreen()
-	username = ("             ")
-	password = ("             ")
-	tUser = false
-	tPass = false
+	
+	term.setBackgroundColor(colors.lightGray)--This is to set the cursor in the username postion.
+	term.setCursorPos(18, 12)
+	username = read()
+	tabs = "password"
+	
 	while true do
 	
-	local event, key = os.pullEvent()
-	if key == keys.tab then
-		if tabs == "password" then
-			drawPassBox()
-			term.setBackgroundColor(colors.lightGray)
-			term.setCursorPos(18, 14)
-			password = read("*")
-			tabs = "username"
-			term.setBackgroundColor(colors.lightBlue)
-		end
-	end
+		local event, key = os.pullEvent() --Waiting for event
 		
-	local event, button, x, y = os.pullEvent()
-	if event == "mouse_click" then
-		if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
-			drawUserBox()
-			term.setBackgroundColor(colors.lightGray)
-			term.setCursorPos(18, 12)
-			username = read()
-			tabs = "password"
-			tUser = true
-			term.setBackgroundColor(colors.lightBlue)
+		if key == keys.tab then --If the tab button is pressed, move to next area
+			if tabs == "password" then
+				drawPassBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 14)
+				password = read("*")
+				tabs = "username"
+				term.setBackgroundColor(colors.lightBlue)
+			end
+		end
+		
+		if key == keys.enter then --If the enter button is pressed, attempt to login
+			if username == nil or password == nil then
+				print("Please enter a username or password!")
+				sleep(1.5)
+				drawScreen()
+			else
+				DOS.login(username, password)
+			end
+		end
+			
+		local event, button, x, y = os.pullEvent()
+		if event == "mouse_click" then
+			if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
+				drawUserBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 12)
+				username = read()
+				tabs = "password"
+				term.setBackgroundColor(colors.lightBlue)
 			elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
-			drawPassBox()
-			term.setBackgroundColor(colors.lightGray)
-			term.setCursorPos(18, 14)
-			password = read("*")
-			tPass = true
-			term.setBackgroundColor(colors.lightBlue)
+				drawPassBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 14)
+				password = read("*")
+				term.setBackgroundColor(colors.lightBlue)
 			elseif x >= 21 and x <= 28 and y == 16 and button == 1 then --loginbutton
-			DOS.login(username, password)
+				if username == nil or password == nil then
+					print("Please enter a username or password!")
+					sleep(1.5)
+					drawScreen()
+				else
+					DOS.login(username, password)
+				end
 			end
 		end
 	end
-	else
+else
 	print("You must be using an adv.Computer")
 end

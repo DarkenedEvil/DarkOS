@@ -1,12 +1,13 @@
+_G.shell = shell
 --Function to run a program if the correct key is pressed(2 keys)--
 function keychoose2(Knum1, Knum2, progrun1, progrun2, wrongrun)
 	local param = os.pullEvent("key")
     if param == Knum1 then
-		os.run({}, progrun1)
+		shell.run(progrun1)
 		elseif param == Knum2 then
-		os.run({}, progrun2)
+		shell.run(progrun2)
 		else
-		os.run({}, wrongrun)                
+		shell.run(wrongrun)                
 		end
 	end
 	
@@ -17,7 +18,7 @@ function rawread(returnprog, username)
     while(bRead) do
         local sEvent, param = os.pullEvent("key")
         if(sEvent == "key") then
-            os.run({}, returnprog, username)
+            shell.run(returnprog, username)
         end
     end
 end
@@ -30,29 +31,29 @@ function login(username, password)
 	local userfile = ("/users/"..hashUser)
 	if userfile ~= "/users/" then
 		if fs.exists(userfile) then
-			local pass = io.open(userfile, "r")
-			local dataS = pass:read() 
+			local pass = fs.open(userfile, "r")
+			local dataS = pass.readAll() 
 			local data = textutils.unserialize(dataS) 
 			local readpassword = data.pass
 			local readusername = data.user
 			local level = data.settings
-			pass:close()
+			pass.close()
 			if level == StrUtils.SHA1("admin") then
 				if readpassword == hashPass and hashUser == readusername then
-					os.run({}, "/sys/admin", username)
+					shell.run("/sys/admin", username)
 					else
 					print("Wrong username or password!")
 					sleep(1.5)
-					os.run({}, "startup")
+					shell.run("startup")
 					end
 				end
 			if level == StrUtils.SHA1("user") then
 				if readpassword == hashPass and hashUser == readusername then
-					os.run({}, "/sys/Home", username)
+					shell.run("/sys/Home", username)
 					else
 					print("Wrong username or password.")
 					sleep(1.5)
-					os.run({}, "startup")
+					shell.run("startup")
 					end
 				end
 			else
@@ -78,21 +79,20 @@ function usercreate(username, password, level, returnName)
 		if fs.exists(userfile) then
 			print("Sorry that username is already taken!")
 			sleep(1.5)
-			os.run({}, "/sys/admin", returnName)
+			shell.run("/sys/admin", returnName)
 			else
-			local fileopen = io.open(userfile, "w") 
+			local fileopen = fs.open(userfile,"w") 
 			local passwrite = {pass = hashPass, user = hashUser, settings = hashLevel} 
-			local dataS = textutils.serialize(passwrite) 
-			local writeIsFail = fileopen:write(dataS) 
-			fileopen:close() 
+			fileopen.write(textutils.serialize(passwrite))
+			fileopen.close() 
 			print("User made!") 
 			sleep(1.5)
-			os.run({}, "/sys/admin", returnName)
+			shell.run("/sys/admin", returnName)
 			end
 		else
 		print("Please enter a username ")
 		sleep(1.5)
-		os.run({}, "/sys/admin", returnName)
+		shell.run("/sys/admin", returnName)
 		end
 	end
 
@@ -113,7 +113,7 @@ function userdelete(dusername, password, username)
 		if hashUser1 == readusername then
 			print("You can't delete your own user silly!")
 			sleep(1.5)
-			os.run({}, "/sys/admin", username)
+			shell.run("/sys/admin", username)
 			else
 			if readpassword == hashPass and hashUser == readusername then
 				print("Are you sure you want to delete the user?")
@@ -124,23 +124,23 @@ function userdelete(dusername, password, username)
 					print("File deleted!")
 					print(username)
 					sleep(1.5)
-					os.run({}, "admin", username)
+					shell.run("admin", username)
 					elseif param == "n" then
-					os.run({}, "admin", username)
+					shell.run("admin", username)
 					else
 					print("Please choose [Y] or [N].")
 					sleep(1.5)
-					os.run({}, "/sys/admin", username)                
+					shell.run("/sys/admin", username)                
 					end
 				else
 				print("Incorrect password or username!")
 				sleep(1.5)
-				os.run({}, "/sys/admin", username)
+				shell.run("/sys/admin", username)
 				end
 			end			
 		else
 		print("That user doesn't exist!")
 		sleep(1.5)
-		os.run({}, "/sys/admin", username)
+		shell.run("/sys/admin", username)
 		end
 	end	

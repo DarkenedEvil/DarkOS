@@ -1,10 +1,11 @@
 Todo
 -Create Settings
 -Fix updater
--Fix setup
 -Fix regular user homepage
+
+After Beta 0.1.0 release:
+-Make usercontrol arrows and mouse
+-Re-Write read() to allow easier tab progression
 -Get rid of DOS api
--Find fix for LuaIDE
--Credits for all program developers
--Live username checking in login page
--Add salt(Better security)
+-Live username checking in user create page
+-Appcenter

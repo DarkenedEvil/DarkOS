@@ -24,7 +24,7 @@ function printcentred(text)
 	term.setCursorPos((maxw-#text)/2,cury)
 	term.write(text)
 	term.setCursorPos(curx,cury+1)
-	end
+end
 
 function drawDropDown()
 	term.setBackgroundColor(colors.lightGray)
@@ -84,6 +84,22 @@ function drawAlert(text)
 	printcentred(text)
 end
 
+function drawSettings()
+	settingUI = paintutils.loadImage("/sys/Images/settings.page")
+	paintutils.drawImage(settingUI,1,1)
+	term.setBackgroundColor(colors.red)
+	term.setCursorPos(39,3)
+	print("X")
+	term.setBackgroundColor(colors.lightGray)
+	term.setCursorPos(10,3)
+	print("Settings")
+	term.setBackgroundColor(colors.gray)
+	term.setCursorPos(11,4)
+	print("Change password")
+	term.setCursorPos(11,6)
+	term.setBackgroundColor(colors.lightBlue)
+end
+
 function drawAbout()
 	aboutUI = paintutils.loadImage("/sys/Images/about.page")
 	paintutils.drawImage(aboutUI,1,1)
@@ -100,7 +116,7 @@ function drawAbout()
 	term.setCursorPos(13,9)
 	print("progression login.")
 	term.setCursorPos(13, 12)
-	print("Version 0.0.1")
+	print("Version 0.1.0")
 	
 end
 
@@ -127,42 +143,179 @@ function drawBackGround()
 	drawUIcon()	
 	drawShellIconBlinkOne()
 end
+
+function printcentred(text)
+	local maxw, maxh = term.getSize() 
+	local curx, cury = term.getCursorPos()
+	term.setCursorPos((maxw-#text)/2,cury)
+	term.write(text)
+	term.setCursorPos(curx,cury+1)
+end
+									
+function drawTitle()
+	term.clear()
+	term.setCursorPos(1,1)
+	term.setBackgroundColor(colors.black)
+	print("DarkOS 0.1.0")
+	term.setBackgroundColor(colors.lightBlue)
+	backGround = paintutils.loadImage("/sys/Images/Title.background")
+	paintutils.drawImage(backGround,1,1)
+end
+									
+function drawScreen()
+	term.setBackgroundColor(colors.lightBlue)
+	term.clear()
+	term.setCursorPos(1,1)
+	drawTitle()
+	term.setBackgroundColor(colors.lightBlue)
+	local maxw, maxh = term.getSize()
+	term.setCursorPos(1,math.floor(maxh/2))
+	printcentred("Password Change")
+	printcentred("             ")
+	printcentred("Current Password:")
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+	term.setBackgroundColor(colors.lightBlue)
+	printcentred("New Password:")
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+	term.setBackgroundColor(colors.lightBlue)
+	printcentred("Re-Type New Password:")
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+	term.setBackgroundColor(colors.lightBlue)
+	printcentred("             ")
+	printcentred("[Submit]")
+end
+									
+function drawUserBox()
+	term.setCursorPos(1, 12)
+	term.setBackgroundColor(colors.lightBlue)
+	term.clearLine()
+	term.setCursorPos(18, 12)
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+end
+									
+function drawPassBox()
+	term.setCursorPos(1, 14)
+	term.setBackgroundColor(colors.lightBlue)
+	term.clearLine()
+	term.setCursorPos(18, 14)
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+end
+									
+function drawPassCheckBox()
+	term.setCursorPos(1, 16)
+	term.setBackgroundColor(colors.lightBlue)
+	term.clearLine()
+	term.setCursorPos(18, 16)
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("              ")
+end
+
 drawBackGround()
---local blink = 1
 while true do
+	--drawBackGround()
 	local event, button, x, y = os.pullEvent()
-	--[[os.startTimer(.5)
-	local event, button, x, y = os.pullEvent()
-	if blink == 1 then
-		drawShellIconBlinkOne()
-		blink = blink + 1
-	elseif blink == 2 then
-		drawShellIconBlinkTwo()
-		blink = blink - 1
-	else
-		error("Unknown blink. Please report this to DarkenedEvil")
-	end--]]
 	if event == "mouse_click" then
 		if x >= 3 and x <= 8 and y == 1 and button == 1 then --DropDown
 			drawDropDown()
 			while true do
 				local event, button, x, y = os.pullEvent()
-				--[[os.startTimer(.5)
-				local event, button, x, y = os.pullEvent()
-				if blink == 1 then
-					drawShellIconBlinkOne()
-					blink = blink + 1
-				elseif blink == 2 then
-					drawShellIconBlinkTwo()
-					blink = blink - 1
-				else
-					error("Unknown blink. Please report this to DarkenedEvil")
-				end--]]
 				if event == "mouse_click" then
 					if x >= 1 and x <= 8 and y == 3 and button == 1 then --Update
 						--os.run({}, "update")
 					elseif x >= 1 and x <= 8 and y == 4 and button == 1 then --Settings
-						
+						drawBackGround()
+						drawSettings()
+						while true do
+							local event, button, x, y = os.pullEvent()
+							if event == "mouse_click" then
+								if x >= 11 and x <= 18 and y == 4 and button == 1 then --Change Password
+									drawScreen()
+									while true do
+										local event, key = os.pullEvent()
+										if key == keys.tab then
+											if tabs == "password" then
+												drawPassBox()
+												term.setBackgroundColor(colors.lightGray)
+												term.setCursorPos(18, 14)
+												password = read("*")
+												tabs = "passCheck"
+												term.setBackgroundColor(colors.lightBlue)
+											elseif tabs == "passCheck" then
+												drawPassCheckBox()
+												term.setBackgroundColor(colors.lightGray)
+												term.setCursorPos(18, 16)
+												passCheck = read("*")
+												term.setBackgroundColor(colors.lightBlue)
+											end
+										end
+											
+										local event, button, x, y = os.pullEvent()
+										if event == "mouse_click" then
+											if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
+												drawUserBox()
+												term.setBackgroundColor(colors.lightGray)
+												term.setCursorPos(18, 12)
+												current = read()
+												tabs = "password"
+												term.setBackgroundColor(colors.lightBlue)
+											elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
+												drawPassBox()
+												term.setBackgroundColor(colors.lightGray)
+												term.setCursorPos(18, 14)
+												newPassword = read("*")
+												tabs = "passCheck"
+												term.setBackgroundColor(colors.lightBlue)
+											elseif x >= 18 and x <= 31 and y == 16 and button == 1 then --newpassword
+												drawPassCheckBox()
+												term.setBackgroundColor(colors.lightGray)
+												term.setCursorPos(18, 16)
+												passCheck = read()
+												term.setBackgroundColor(colors.lightGray)				
+											elseif x >= 21 and x <= 28 and y == 18 and button == 1 then --submit
+												cuserfile = ("/users/"..tArgs[1])
+												local HashPass = StrUtils.SHA1(newPassword)
+												if passCheck == newPassword then
+													local cpass = io.open(cuserfile, "r")
+													local cdataS = cpass:read() 
+													local cdata = textutils.unserialize(cdataS) 
+													local creadpassword = cdata.pass
+													local creadusername = cdata.user
+													local clevel = cdata.settings
+													cpass:close()
+													if tArgs[1] == creadusername and HashPass == creadpassword then
+														local newHashPass = StrUtils.SHA1(passCheck)
+														local fileopen = io.open(cuserfile, "w") 
+														local passwrite = {pass = newHashPass, user = creadusername, settings = clevel} 
+														local dataS = textutils.serialize(passwrite) 
+														local writeIsFail = fileopen:write(dataS)
+														fileopen:close()
+														print("Password changed!")
+														sleep(1.5)
+													else
+														print("Current Password incorrect!")
+														sleep(1.5)
+													end
+												else
+													print("Passwords did not match")
+													sleep(2)
+												end
+											else
+												print("Please enter a password")
+												os.sleep(1.5)
+											end
+										end
+									end
+								elseif x == 39 and y == 3 and button == 1 then --close 
+									drawBackGround()
+									break
+								end
+							end
+						end
 					elseif x >= 1 and x <= 8 and y == 5 and button == 1 then --about
 						drawBackGround()
 						drawAbout()
@@ -189,33 +342,32 @@ while true do
 							end
 						end
 						break
-						elseif x >= 1 and x <= 8 and y == 7 and button == 1 then --Logout
-							os.reboot()
-						elseif x >= 1 and x <= 8 and y == 8 and button == 1 then --shutdown
-							os.shutdown()
-						elseif x >= 1 and x <= 7 and y == 1 and button == 1 then --Exit DropDown
-							drawBackGround()
-							break
+					elseif x >= 1 and x <= 8 and y == 7 and button == 1 then --Logout
+						os.reboot()
+					elseif x >= 1 and x <= 8 and y == 8 and button == 1 then --shutdown
+						os.shutdown()
+					elseif x >= 1 and x <= 7 and y == 1 and button == 1 then --Exit DropDown
+						drawBackGround()
+						break
 					end
 				end
 			end
 		end
 		if x >= 37 and x <= 45 and y >= 5 and y <= 15 and button == 1 then --Usercontrol
-			os.run({}, "/sys/usercontrol", tArgs[1])
+			shell.run("/sys/usercontrol", tArgs[1])
 		elseif x >= 1 and x <= 8 and y <=8 and y >= 7 and button == 1  then --FileBrowser
 			os.run({}, "/programs/filebrowser")
+			drawBackGround()
 		elseif x >= 13 and x <= 25 and y <= 15 and y >= 4 and button == 1 then --Shell
 			os.run({},"/sys/shell", username)
 		elseif x >= 1 and x <= 8 and y <= 10 and y >= 10 and button == 1 then --LuaIDE
-			os.run({["shell"] = shell}, "/programs/luaide", "luaide", username)
+			shell.run("/programs/luaide")
+			drawBackGround()
 		elseif x >=1 and x <= 8 and y <=5 and y >=4 and button == 1 then --AppCenter
-			if Alert == true then
-				drawBackGround()
-				Alert = false
-			else
-				drawAlert("Comming Soon!")
-				Alert = true
-			end
+			drawAlert("Comming Soon!")
+			term.setBackgroundColor(colors.lightBlue)
+			os.sleep(1.5)
+			drawBackGround()
 		end
 	end
 end

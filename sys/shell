@@ -1,4 +1,4 @@
-
+_G.shell = shell
 local tArgs = { ... }
 if #tArgs > 1 or #tArgs < 1 then error("Need them args bro") end
 local returnName = tArgs[1]
@@ -8,7 +8,7 @@ local tCommandHistory = {}
 local tEnv = {
 	["exit"] = function()
 		--bRunning = false
-		os.run({}, "/sys/admin", returnName)
+		shell.run("/sys/admin", returnName)
 	end,
 }
 setmetatable( tEnv, { __index = getfenv() } )
