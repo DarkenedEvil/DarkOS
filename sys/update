@@ -1,22 +1,214 @@
 os.pullEvent = os.pullEventRaw
+_G.shell = shell
+term.setBackgroundColor(colors.lightBlue)
 term.clear()
 term.setCursorPos(1,1)
-_G.shell = shell
-print("Updating DarkOS")
-print("Deleting files to be updated. Don't worry your progams will not be deleted.")
-fs.delete("apis/DOS")
-fs.delete("/programs/calculator")
-fs.delete("startup")
-fs.delete("Home")
-fs.delete("admin")
-fs.delete("info")
-print("Files deleted. Installing updated files.")
-shell.run("pastebin", "get", "9zLcX7sM", "apis/DOS")
-shell.run("pastebin", "get", "yhDGmETF", "admin")
-shell.run("pastebin", "get", "U3tw9zhg", "Home")
-shell.run("pastebin", "get", "kk7Jyfr8", "/programs/calculator")
-shell.run("pastebin", "get", "Ls8MXuP5", "startup")
-shell.run("pastebin", "get", "ZG6LaWC7", "info")
-print("All files updated you can now enjoy an updated version of DarkOS!")
-sleep(2)
-shell.run("startup")
+term.setTextColor(colors.white)
+
+local tArgs = {...}
+if #tArgs < 1 then
+	error("Expected Username but got less. Please report this to DarkenedEvil.")
+end
+if #tArgs > 1 then
+	error("Expected Username but got more! Please report this to DarkenedEvil")
+end
+
+local function printcentred(text)
+	local maxw, maxh = term.getSize() 
+	local curx, cury = term.getCursorPos()
+	term.setCursorPos((maxw-#text)/2,cury)
+	term.write(text)
+	term.setCursorPos(curx,cury+1)
+end
+
+term.setBackgroundColor(colors.red)
+printcentred("DarkOS is updating!")
+printcentred("Please DO NOT shut-down or reboot the computer!")
+term.setBackgroundColor(colors.lightBlue)
+
+term.setCursorPos(18,4)
+term.setBackgroundColor(colors.white)
+term.setTextColor(colors.black)
+printcentred("          Updating           ")
+term.setCursorPos(11,5)
+print(" ")
+term.setCursorPos(39,5)
+print(" ")
+term.setCursorPos(20,6)
+printcentred("                             ")
+term.setCursorPos(20,5)
+term.setBackgroundColor(colors.lightGray)
+printcentred("                           ")
+
+term.setCursorPos(11,7)
+local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/sys/tmpupdate")
+if remoteHandle then
+	print("File list downloaded")
+	list = remoteHandle.readAll()
+	remoteHandle.close()
+	fileList = textutils.unserialize(list)
+	fs.delete("/sys/tmpupdate")
+else
+	print("Cannot download file list")
+end
+
+
+function download()
+	--[[local fileList = {
+        "apis/DOS",
+        "apis/StrUtils",
+        "startup",
+        "sys/admin",
+        "sys/Home",
+        "sys/info",
+        "sys/shell",
+        "sys/uninstall",
+        "sys/update",
+        "sys/usercontrol",
+        "sys/Images/.background",
+        "sys/Images/Title.background",
+        "sys/Images/about.page",
+		"sys/Images/console.page",
+        "sys/Images/credits.page",
+		"sys/Images/settings.page",
+        "sys/Images/shell.icon",
+        "sys/Images/u.icon",
+        "programs/filebrowser",
+		"programs/luaide",
+}--]]
+stats = 0
+function addStatus()
+	stats = stats + 1
+	if stats == 1 then
+		term.setCursorPos(12,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats == 2 then
+		term.setCursorPos(13,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 3 then
+		term.setCursorPos(14,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 4 then
+		term.setCursorPos(15,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 5 then
+		term.setCursorPos(16,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 6 then
+		term.setCursorPos(17,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 7 then
+		term.setCursorPos(18,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 8 then
+		term.setCursorPos(19,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 9 then
+		term.setCursorPos(20,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 10 then
+		term.setCursorPos(21,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 11 then
+		term.setCursorPos(22,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 12 then
+		term.setCursorPos(23,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 13 then
+		term.setCursorPos(24,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 14 then
+		term.setCursorPos(25,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 15 then
+		term.setCursorPos(26,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 16 then
+		term.setCursorPos(27,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 17 then
+		term.setCursorPos(28,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 18 then
+		term.setCursorPos(29,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 19 then
+		term.setCursorPos(30,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
+	elseif stats  == 20 then
+		term.setCursorPos(20,5)
+		term.setBackgroundColor(colors.gray)
+		printcentred("                           ")
+	end
+end
+	for _, file in ipairs(fileList) do
+		term.setCursorPos(11,7)
+		term.setBackgroundColor(colors.lightBlue)
+		print("Downloading: "..file)
+		local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/"..file)
+		if remoteHandle then
+			if file == "startup" then
+				fileHandle = io.open(file, "w")
+				if fileHandle then
+					fileHandle:write(remoteHandle.readAll())
+					fileHandle:close()
+					addStatus()
+				else
+					term.setCursorPos(11,7)
+					term.setBackgroundColor(colors.lightBlue)
+					term.clearLine()
+					error("Could not open:"..file)
+				end
+			else
+				fileHandle = io.open("/"..file, "w")
+				if fileHandle then
+					fileHandle:write(remoteHandle.readAll())
+					fileHandle:close()
+					addStatus()
+				else
+					term.setCursorPos(11,7)
+					term.setBackgroundColor(colors.lightBlue)
+					term.clearLine()
+					error("Could not open:"..file)
+				end
+			end
+		else
+			term.setCursorPos(11,7)
+			term.setBackgroundColor(colors.lightBlue)
+			term.clearLine()
+			error("Could not download."..file)
+		end
+	end
+end
+download()
+if stats < 20 then
+	stats = 19
+	addStatus()
+	sleep(1)
+end
+term.setCursorPos(11,7)
+term.setBackgroundColor(colors.lightBlue)
+term.clearLine()
+print("All files downloaded")
+sleep(1)
+shell.run("admin", tArgs[1])

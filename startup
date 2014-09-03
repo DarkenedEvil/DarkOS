@@ -40,6 +40,10 @@ if term.isColor() then --checking to see if computer is adv.
 		term.setBackgroundColor(colors.lightBlue)
 		printcentred("             ")
 		printcentred("[Login]")
+		term.setCursorPos(51,1)
+		term.setTextColor(colors.white)
+		term.setBackgroundColor(colors.red)
+		print("X")
 	end
 	
 	function drawUserBox()
@@ -115,6 +119,11 @@ if term.isColor() then --checking to see if computer is adv.
 				else
 					DOS.login(username, password)
 				end
+			elseif x == 51 and y == 1 and button == 1 then --Shutdown Button
+				term.setTextColor(colors.red)
+				printcentred("Shutting Down")
+				os.sleep(1)
+				os.shutdown()
 			end
 		end
 	end

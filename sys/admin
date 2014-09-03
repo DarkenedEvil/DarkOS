@@ -10,12 +10,32 @@ end
 
 local username = tArgs[1]
 
+local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/sys/verison")
+if remoteHandle then
+	version = remoteHandle.readAll()
+	remoteHandle.close()
+	fs.delete("/sys/version")
+end
+
+
+local info = fs.open("/sys/info", "r")
+local data = info.readAll()
+info.close()
+
+if data < version then
+	print("test")
+	shell.run("update", tArgs[1])
+else
+	print("Test1")
+end
+term.setTextColor(colors.black)
+
 function Header()
 	term.setCursorPos(1,1)
 	term.setBackgroundColor(colors.blue)
 	term.clearLine()
 	term.setCursorPos(2,1)
-	print("[Home]     Welcome "..username)
+	print("[Home]           Welcome "..username.."            "..textutils.formatTime(os.time(), false))
 end
 
 function printcentred(text)
@@ -96,6 +116,8 @@ function drawSettings()
 	term.setBackgroundColor(colors.gray)
 	term.setCursorPos(11,4)
 	print("Change password")
+	term.setCursorPos(11,5)
+    print("Clock Type     24hr. - 12hr.")
 	term.setCursorPos(11,6)
 	term.setBackgroundColor(colors.lightBlue)
 end
@@ -215,14 +237,21 @@ function drawPassCheckBox()
 	printcentred("              ")
 end
 
+--Checking Settings
+
+
 drawBackGround()
 while true do
 	--drawBackGround()
+	Header()
+	os.startTimer(1)
 	local event, button, x, y = os.pullEvent()
 	if event == "mouse_click" then
 		if x >= 3 and x <= 8 and y == 1 and button == 1 then --DropDown
 			drawDropDown()
 			while true do
+				Header()
+				os.startTimer(1)
 				local event, button, x, y = os.pullEvent()
 				if event == "mouse_click" then
 					if x >= 1 and x <= 8 and y == 3 and button == 1 then --Update
@@ -231,6 +260,8 @@ while true do
 						drawBackGround()
 						drawSettings()
 						while true do
+							Header()
+							os.startTimer(1)
 							local event, button, x, y = os.pullEvent()
 							if event == "mouse_click" then
 								if x >= 11 and x <= 18 and y == 4 and button == 1 then --Change Password
@@ -310,6 +341,10 @@ while true do
 											end
 										end
 									end
+								elseif x >= 26 and x <= 30 and y == 5 and button == 1 then --change clock to 24hr
+									print("Changed")
+								elseif x >= 34 and x <= 38 and y == 5 and button == 1 then --change clock to  12 hr
+									print("Changed1")
 								elseif x == 39 and y == 3 and button == 1 then --close 
 									drawBackGround()
 									break
@@ -320,6 +355,8 @@ while true do
 						drawBackGround()
 						drawAbout()
 						while true do
+							Header()
+							os.startTimer(1)
 							local event, button, x, y = os.pullEvent()
 							if event == "mouse_click" then
 								if x == 40 and y == 5 and button == 1 then --close box
@@ -333,6 +370,8 @@ while true do
 						drawBackGround()
 						drawCredits()
 						while true do
+							Header()
+							os.startTimer(1)
 							local event, button, x, y = os.pullEvent()
 							if event == "mouse_click" then
 								if x == 46 and y == 5 and button == 1 then --close box
