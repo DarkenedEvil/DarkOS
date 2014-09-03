@@ -1,1 +1,1 @@
-{"apis/DOS", "apis/StrUtils"}
+{"apis/DOS", "apis/StrUtils", "sys/installer", "sys/usercontrol"}
