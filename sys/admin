@@ -1,4 +1,5 @@
 os.pullEvent = os.pullEventRaw
+term.setTextColor(colors.black)
 
 local tArgs = {...}
 if #tArgs < 1 then
@@ -10,11 +11,37 @@ end
 
 local username = tArgs[1]
 
-local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/sys/verison")
+function drawTitle()
+	term.setBackgroundColor(colors.lightBlue)
+	term.clear()
+	term.setCursorPos(1,1)
+	term.setBackgroundColor(colors.black)
+	term.setTextColor(colors.white)
+	print("DarkOS 0.1.0")
+	term.setBackgroundColor(colors.lightBlue)
+	backGround = paintutils.loadImage("/sys/Images/Title.background")
+	paintutils.drawImage(backGround,1,1)
+end
+
+function printcentred(text)
+	local maxw, maxh = term.getSize() 
+	local curx, cury = term.getCursorPos()
+	term.setCursorPos((maxw-#text)/2,cury)
+	term.write(text)
+	term.setCursorPos(curx,cury+1)
+end
+
+drawTitle()
+local maxw, maxh = term.getSize()
+term.setCursorPos(1,math.floor(maxh/2))
+printcentred("Loading...")
+
+local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/sys/version")
 if remoteHandle then
 	version = remoteHandle.readAll()
 	remoteHandle.close()
 	fs.delete("/sys/version")
+	print(version)
 end
 
 
@@ -23,16 +50,14 @@ local data = info.readAll()
 info.close()
 
 if data < version then
-	print("test")
 	shell.run("update", tArgs[1])
-else
-	print("Test1")
 end
 term.setTextColor(colors.black)
 
 function Header()
 	term.setCursorPos(1,1)
 	term.setBackgroundColor(colors.blue)
+	term.setTextColor(colors.black)
 	term.clearLine()
 	term.setCursorPos(2,1)
 	print("[Home]           Welcome "..username.."            "..textutils.formatTime(os.time(), false))
@@ -158,6 +183,7 @@ function drawBackGround()
 	term.clear()
 	term.setCursorPos(1,1)
 	term.setBackgroundColor(colors.lightBlue)
+	term.setTextColor(colors.black)
 	backGround = paintutils.loadImage("/sys/Images/.background")
 	paintutils.drawImage(backGround,1,1)
 	Header()
@@ -239,7 +265,7 @@ end
 
 --Checking Settings
 
-
+term.setTextColor(colors.black)
 drawBackGround()
 while true do
 	--drawBackGround()

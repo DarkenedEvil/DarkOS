@@ -1,5 +1,5 @@
 os.pullEvent = os.pullEventRaw
-
+_G.shell = shell
 local tArgs = {...}
 if #tArgs < 1 then
 	error("Expected Username but got less. Please report this to DarkenedEvil.")
@@ -19,482 +19,329 @@ function printcentred(text)
 	term.write(text)
 	term.setCursorPos(curx,cury+1)
 end
-
-local o = 1
-
-while true do
-	 term.clear()
-	 term.setCursorPos(1,1)
-	 if o == 1 then
-		local maxw, maxh = term.getSize()
-		term.setBackgroundColor(colors.lightBlue)
-		term.clear()
-		term.setCursorPos(1,1)
-		term.setBackgroundColor(colors.black)
-		print("Press Delete to return")
-		term.setBackgroundColor(colors.lightBlue)
-		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred("What would you like to do with users?")
-		term.setBackgroundColor(colors.blue)
-		printcentred(">Lookup users<")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("Delete a user")
-		printcentred("Create a user")
-		printcentred("Change a password")
-	 elseif o == 2 then
-		local maxw, maxh = term.getSize()
-		term.setBackgroundColor(colors.lightBlue)
-		term.clear()
-		term.setCursorPos(1,1)
-		term.setBackgroundColor(colors.black)
-		print("Press Delete to return")
-		term.setBackgroundColor(colors.lightBlue)
-		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred("What would you like to do with users?")
-		printcentred("Lookup users")
-		term.setBackgroundColor(colors.blue)
-		printcentred(">Delete a user<")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("Create a user")
-		printcentred("Change a password")
-	 elseif o == 3 then
-		local maxw, maxh = term.getSize()
-		term.setBackgroundColor(colors.lightBlue)
-		term.clear()
-		term.setCursorPos(1,1)
-		term.setBackgroundColor(colors.black)
-		print("Press Delete to return")
-		term.setBackgroundColor(colors.lightBlue)
-		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred("What would you like to do with users?")
-		printcentred("Lookup users")
-		printcentred("Delete a user")
-		term.setBackgroundColor(colors.blue)
-		printcentred(">Create a user<")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("Change a password")
-	 elseif o == 4 then
-		local maxw, maxh = term.getSize()
-	 	term.setBackgroundColor(colors.lightBlue)
-		term.clear()
-		term.setCursorPos(1,1)
-		term.setBackgroundColor(colors.black)
-		print("Press Delete to return")
-		term.setBackgroundColor(colors.lightBlue)
-		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred("What would you like to do with users?")
-		printcentred("Lookup users")
-		printcentred("Delete a user")
-		printcentred("Create a user")
-		term.setBackgroundColor(colors.blue)
-		printcentred(">Change a password<")
-		term.setBackgroundColor(colors.lightBlue)
-	 end
-	 _, key = os.pullEvent("key")
-	if key == keys.up and o > 1 then
-		o = o - 1
-	elseif key == keys.down and o < 4 then
-		o = o + 1
-	elseif key == keys.up and o == 1 then
-		o = 4
-	elseif key == keys.down and o == 4 then
-		o = 1
-	elseif key == keys.delete then
-		os.run({}, "/sys/admin", returnName)
-	elseif key == keys.enter then
-		break
-	end
+function screen()
+	local maxw, maxh = term.getSize()
+	term.setBackgroundColor(colors.lightBlue)
+	term.clear()
+	term.setCursorPos(1,1)
+	term.setBackgroundColor(colors.blue)
+	print("<----Go Back")
+	term.setBackgroundColor(colors.lightBlue)
+	term.setCursorPos(1,3)
+	printcentred("What would you like to do with users?")
+	printcentred(" ")
+	printcentred(" ")
+	term.setBackgroundColor(colors.blue)
+	printcentred("  Lookup users   ")
+	term.setBackgroundColor(colors.lightBlue)
+	printcentred(" ")
+	printcentred(" ")
+	term.setBackgroundColor(colors.blue)
+	printcentred("  Delete a user  ")
+	term.setBackgroundColor(colors.lightBlue)
+	printcentred(" ")
+	printcentred(" ")
+	term.setBackgroundColor(colors.blue)
+	printcentred("  Create a user  ")
+	term.setBackgroundColor(colors.lightBlue)
+	term.setBackgroundColor(colors.lightBlue)
 end
-if o == 2 then
-	function drawScreen()
-		term.setBackgroundColor(colors.lightBlue)
-		term.clear()
-		term.setCursorPos(1,1)
-		term.setBackgroundColor(colors.black)
-		term.clearLine()
-		print("Press Del to return")
-		term.setBackgroundColor(colors.lightBlue)
-		local maxw, maxh = term.getSize()
-		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred("Enter the Username and Password of the user.")
-		printcentred("             ")
-		printcentred("Username:")
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("Password:")
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("             ")
-		printcentred("[Delete]")
-	end
-	
-	function drawAlert(text)
-		term.setBackgroundColor(colors.red)
-		local maxw, maxh = term.getSize()
-		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred(text)
-		term.setBackgroundColor(colors.lightBlue)
-	end	
-	
-	function drawUserBox()
-		term.setCursorPos(1, 12)
-		term.setBackgroundColor(colors.lightBlue)
-		term.clearLine()
-		term.setCursorPos(18, 12)
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-	end
-	
-	function drawPassBox()
-		term.setCursorPos(18, 14)
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-	end
-	username = ("             ")
-	password = ("             ")
-	drawScreen()
-	while true do
-		local event, key = os.pullEvent()
-		if key == keys.tab then
-			if tabs == "password" then
-				drawPassBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 14)
-				password = read("*")
-				tabs = "username"
+screen()
+while true do
+	local event, button, x, y = os.pullEvent()
+	if event == "mouse_click" then
+		if x >= 17 and x <= 33 and y == 6 and button == 1 then
+			term.clear()
+			term.setCursorPos(1,1)
+			local FileList = fs.list("/users/")
+			textutils.tabulate(FileList)
+			DOS.rawread("/sys/usercontrol", tArgs[1])
+		elseif x >= 1 and x <= 12 and y == 1 and button == 1 then
+			shell.run("/sys/admin", tArgs[1])
+		elseif x >= 17 and x <= 33 and y == 9 and button == 1 then--Delete a User
+			function drawScreen()
 				term.setBackgroundColor(colors.lightBlue)
+				term.clear()
+				term.setCursorPos(1,1)
+				term.setBackgroundColor(colors.blue)
+				print("<----Go Back")
+				term.setBackgroundColor(colors.lightBlue)
+				local maxw, maxh = term.getSize()
+				term.setCursorPos(1,math.floor(maxh/2))
+				printcentred("Enter the Username and Password of the user.")
+				printcentred("             ")
+				printcentred("Username:")
+				term.setBackgroundColor(colors.lightGray)
+				printcentred("              ")
+				term.setBackgroundColor(colors.lightBlue)
+				printcentred("Password:")
+				term.setBackgroundColor(colors.lightGray)
+				printcentred("              ")
+				term.setBackgroundColor(colors.lightBlue)
+				printcentred("             ")
+				printcentred("[Delete]")
 			end
-		elseif key == keys.delete then
-			os.run({}, "/sys/usercontrol", returnName)
-		end
-			
-		local event, button, x, y = os.pullEvent()
-		if event == "mouse_click" then
-			if x >= 18 and x <= 31 and y == 12 and button == 1 then --username
-				drawUserBox()
-				term.setBackgroundColor(colors.lightGray)
+		
+			function drawAlert(text)
+				term.setBackgroundColor(colors.red)
+				local maxw, maxh = term.getSize()
+				term.setCursorPos(1,math.floor(maxh/2))
+				printcentred(text)
+				term.setBackgroundColor(colors.lightBlue)
+			end	
+		
+			function drawUserBox()
+				term.setCursorPos(1, 12)
+				term.setBackgroundColor(colors.lightBlue)
+				term.clearLine()
 				term.setCursorPos(18, 12)
-				username = read()
-				tabs = "password"
-				tUser = true
-				term.setBackgroundColor(colors.lightBlue)
-			elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
-				drawPassBox()
 				term.setBackgroundColor(colors.lightGray)
+				printcentred("              ")
+			end
+			
+			function drawPassBox()
 				term.setCursorPos(18, 14)
-				password = read("*")
-				tPass = true
-				term.setBackgroundColor(colors.lightBlue)
-			elseif x >= 21 and x <= 28 and y == 16 and button == 1 then--delete
-				if username or password == nil then
-					drawAlert("Please enter both a username and password!")
+				term.setBackgroundColor(colors.lightGray)
+				printcentred("              ")
+			end
+			username = ("             ")
+			password = ("             ")
+			drawScreen()
+			while true do
+				local event, key = os.pullEvent()
+				if key == keys.tab then
+					if tabs == "password" then
+						drawPassBox()
+						term.setBackgroundColor(colors.lightGray)
+						term.setCursorPos(18, 14)
+						password = read("*")
+						tabs = "username"
+						term.setBackgroundColor(colors.lightBlue)
+					end
 				end
-				local hashPass = StrUtils.SHA1(password)
-				local userfile = ("/users/"..username)
-				if fs.exists(userfile) then
-					local pass = io.open(userfile, "r")
-					local dataS = pass:read() 
-					local data = textutils.unserialize(dataS) 
-					local readpassword = data.pass
-					local readusername = data.user
-					pass:close()
-					if returnName == readusername then
-						print("You can't delete your own user silly!")
+				
+				if key == keys.enter then --If the enter button is pressed, attempt to delete
+					if username == nil or password == nil then
+						print("Please enter a username or password!")
 						sleep(1.5)
+						drawScreen()
 					else
-						if readpassword == hashPass and username == readusername then
-							while true do
-								term.clear()
-								term.setCursorPos(1,1)
-								print("Are you sure you want to delete the user?")
-								print("[Y] or [N]")
-								local event, param = os.pullEvent("char")
-								if param == "y" then
-									fs.delete(userfile)
-									print("File deleted!")
-									sleep(1.5)
-									print("Press any key to return.")
-									bRead = true
-									while(bRead) do
-										local sEvent, param = os.pullEvent("key")
-										if(sEvent == "key") then
-											os.run({}, "/sys/admin", tArgs[1])
+						local hashPass = StrUtils.SHA1(password)
+						local userfile = ("/users/"..username)
+						if fs.exists(userfile) then
+							local pass = io.open(userfile, "r")
+							local dataS = pass:read() 
+							local data = textutils.unserialize(dataS) 
+							local readpassword = data.pass
+							local readusername = data.user
+							pass:close()
+							if returnName == readusername then
+								print("You can't delete your own user silly!")
+								sleep(1.5)
+							else
+								if readpassword == hashPass and username == readusername then
+									while true do
+										term.clear()
+										term.setCursorPos(1,1)
+										print("Are you sure you want to delete the user?")
+										print("[Y] or [N]")
+										local event, param = os.pullEvent("char")
+										if param == "y" then
+											fs.delete(userfile)
+											print("File deleted!")
+											sleep(1.5)
+											print("Press any key to return.")
+											bRead = true
+											while(bRead) do
+												local sEvent, param = os.pullEvent("key")
+												if(sEvent == "key") then
+													os.run({}, "/sys/admin", tArgs[1])
+												end
+											end
+										elseif param == "n" then
+											os.run({}, "/sys/usercontrol", returnName)
+										else
+											print("Please choose [Y] or [N].")
+											sleep(1.5)           
 										end
 									end
-								elseif param == "n" then
-									os.run({}, "/sys/usercontrol", returnName)
 								else
-									print("Please choose [Y] or [N].")
-									sleep(1.5)           
+									print("Incorrect password or username!")
+									sleep(1.5)
 								end
 							end
 						else
-							print("Incorrect password or username!")
+							print("That user doesn't exist!")
 							sleep(1.5)
 						end
 					end
-				else
-					print("That user doesn't exist!")
-					sleep(1.5)
+				end
+					
+				local event, button, x, y = os.pullEvent()
+				if event == "mouse_click" then
+					if x >= 18 and x <= 31 and y == 12 and button == 1 then --username
+						drawUserBox()
+						term.setBackgroundColor(colors.lightGray)
+						term.setCursorPos(18, 12)
+						username = read()
+						tabs = "password"
+						tUser = true
+						term.setBackgroundColor(colors.lightBlue)
+					elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
+						drawPassBox()
+						term.setBackgroundColor(colors.lightGray)
+						term.setCursorPos(18, 14)
+						password = read("*")
+						tPass = true
+						term.setBackgroundColor(colors.lightBlue)
+					elseif x >= 21 and x <= 28 and y == 16 and button == 1 then--delete
+						if username or password == nil then
+							drawAlert("Please enter both a username and password!")
+						end
+						local hashPass = StrUtils.SHA1(password)
+						local userfile = ("/users/"..username)
+						if fs.exists(userfile) then
+							local pass = io.open(userfile, "r")
+							local dataS = pass:read() 
+							local data = textutils.unserialize(dataS) 
+							local readpassword = data.pass
+							local readusername = data.user
+							pass:close()
+							if returnName == readusername then
+								print("You can't delete your own user silly!")
+								sleep(1.5)
+							else
+								if readpassword == hashPass and username == readusername then
+									while true do
+										term.clear()
+										term.setCursorPos(1,1)
+										print("Are you sure you want to delete the user?")
+										print("[Y] or [N]")
+										local event, param = os.pullEvent("char")
+										if param == "y" then
+											fs.delete(userfile)
+											print("File deleted!")
+											sleep(1.5)
+											print("Press any key to return.")
+											bRead = true
+											while(bRead) do
+												local sEvent, param = os.pullEvent("key")
+												if(sEvent == "key") then
+													os.run({}, "/sys/admin", tArgs[1])
+												end
+											end
+										elseif param == "n" then
+											os.run({}, "/sys/usercontrol", returnName)
+										else
+											print("Please choose [Y] or [N].")
+											sleep(1.5)           
+										end
+									end
+								else
+									print("Incorrect password or username!")
+									sleep(1.5)
+								end
+							end
+						else
+							print("That user doesn't exist!")
+							sleep(1.5)
+						end
+					elseif x >= 1 and x <= 12 and y == 1 and button == 1 then
+						screen()
+						break
+					end
 				end
 			end
-		end
-	end
-elseif o == 1 then
-	term.clear()
-	term.setCursorPos(1,1)
-	local FileList = fs.list("/users/")
-	textutils.tabulate(FileList)
-	DOS.rawread("/sys/usercontrol", tArgs[1])
-elseif o == 3 then
-	while true do
-		term.clear()
-		term.setCursorPos(1,1)
-		term.setBackgroundColor(colors.lightBlue)
-		print("Will this be an Admin [A] or a regular [R] user?")
-		local event, key = os.pullEvent("char")
-		if event == "char" then
-			if key == "a" then
-				print("Please make a username.")
-				write("> ")
-				local username = read()
-				print("Please make a password.")
-				write("> ")
-				local password = read()
-				print("Please confirm the password.")
-				write("> ")
-				local passmakecheck = read()
-				if password == passmakecheck then
-					DOS.usercreate(username, password, "admin", returnName)
-				else
-					print("Passwords didn't match!")
-					sleep(1.5)
+		elseif x >= 17 and x <= 33 and y == 12 and button == 1 then
+			while true do
+				function drawScreen()
+					term.setBackgroundColor(colors.lightBlue)
+					term.clear()
+					term.setCursorPos(1,1)
+					term.setBackgroundColor(colors.blue)
+					print("<----Go Back")
+					term.setBackgroundColor(colors.lightBlue)
+					local maxw, maxh = term.getSize()
+					term.setCursorPos(1,math.floor(maxh/2))
+					printcentred("Enter the Username and Password of the user.")
+					printcentred("             ")
+					printcentred("Username:")
+					term.setBackgroundColor(colors.lightGray)
+					printcentred("              ")
+					term.setBackgroundColor(colors.lightBlue)
+					printcentred("Password:")
+					term.setBackgroundColor(colors.lightGray)
+					printcentred("              ")
+					term.setBackgroundColor(colors.lightBlue)
+					printcentred("Confirm Password")
+					term.setBackgroundColor(colors.lightGray)
+					printcentred("              ")
+					term.setBackgroundColor(colors.lightBlue)
+					printcentred("              ")
+					printcentred("[Create]")
 				end
-			elseif key == "r" then
-				print("Please make a username.")
-				write("> ")
-				local usermake = read()
-				print("Please make a password.")
-				write("> ")
-				local passmake = read()
-				print("Please confirm the password.")
-				write("> ")
-				local passmakecheck = read()
-				if passmake == passmakecheck then
-					DOS.usercreate(usermake, passmake, "user", returnName)
-				else
-					print("Passwords didn't match!")
-					sleep(1.5)
-					DOS.rawread("usercontrol", tArgs[1])
+				
+				function drawSetting()
+					term.setBackgroundColor(colors.lightBlue)
+					term.clear()
+					term.setCursorPos(1,1)
+					term.setBackgroundColor(colors.blue)
+					print("<----Go Back")
+					term.setBackgroundColor(colors.lightBlue)
+					term.setBackgroundColor(colors.lightBlue)
+					local maxw, maxh = term.getSize()
+					term.setCursorPos(1,math.floor(maxh/2))
+					printcentred("User Level")
+					printcentred(" ")
+					
+					
 				end
-			else
-				print("Please select [A] or [R].")
-				sleep(1.5)
-				DOS.rawread("usercontrol", tArgs[1])
-			end
-		else
-			print("ERROR")
-		end
-	end
-elseif o == 4 then
-	function printcentred(text)
-		local maxw, maxh = term.getSize() 
-		local curx, cury = term.getCursorPos()
-		term.setCursorPos((maxw-#text)/2,cury)
-		term.write(text)
-		term.setCursorPos(curx,cury+1)
-	end
-	
-	function drawTitle()
-		term.clear()
-		term.setCursorPos(1,1)
-		term.setBackgroundColor(colors.black)
-		print("DarkOS 0.1.0")
-		term.setBackgroundColor(colors.lightBlue)
-		backGround = paintutils.loadImage("/sys/Images/Title.background")
-		paintutils.drawImage(backGround,1,1)
-	end
-	
-	function drawScreen()
-		term.setBackgroundColor(colors.lightBlue)
-		term.clear()
-		term.setCursorPos(1,1)
-		drawTitle()
-		term.setBackgroundColor(colors.lightBlue)
-		local maxw, maxh = term.getSize()
-		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred("Password Change")
-		printcentred("             ")
-		printcentred("Username of account:")
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("Current Password:")
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("New Password:")
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-		term.setBackgroundColor(colors.lightBlue)
-		printcentred("             ")
-		printcentred("[Submit]")
-	end
-	
-	function drawUserBox()
-		term.setCursorPos(1, 12)
-		term.setBackgroundColor(colors.lightBlue)
-		term.clearLine()
-		term.setCursorPos(18, 12)
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-	end
-	
-	function drawPassBox()
-		term.setCursorPos(1, 14)
-		term.setBackgroundColor(colors.lightBlue)
-		term.clearLine()
-		term.setCursorPos(18, 14)
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-	end
-	
-	function drawPassCheckBox()
-		term.setCursorPos(1, 16)
-		term.setBackgroundColor(colors.lightBlue)
-		term.clearLine()
-		term.setCursorPos(18, 16)
-		term.setBackgroundColor(colors.lightGray)
-		printcentred("              ")
-	end
-	
-	drawScreen()
-	while true do
-		local event, key = os.pullEvent()
-		if key == keys.tab then
-			if tabs == "password" then
-				drawPassBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 14)
-				password = read("*")
-				tabs = "passCheck"
-				term.setBackgroundColor(colors.lightBlue)
-			elseif tabs == "passCheck" then
-				drawPassCheckBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 16)
-				passCheck = read("*")
-				term.setBackgroundColor(colors.lightBlue)
-			end
-		end
-			
-		local event, button, x, y = os.pullEvent()
-		if event == "mouse_click" then
-			if x >= 18 and x <= 31 and y == 12 and button == 1 then --login
-				drawUserBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 12)
-				username = read()
-				tabs = "password"
-				term.setBackgroundColor(colors.lightBlue)
-			elseif x >= 18 and x <= 31 and y == 14 and button == 1 then --password
-				drawPassBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 14)
-				password = read("*")
-				tabs = "passCheck"
-				term.setBackgroundColor(colors.lightBlue)
-			elseif x >= 18 and x <= 31 and y == 16 and button == 1 then --newpassword
-				drawPassCheckBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 16)
-				passCheck = read()
-				term.setBackgroundColor(colors.lightGray)				
-			elseif x >= 21 and x <= 28 and y == 18 and button == 1 then --submit
-				cuserfile = ("/users/"..username)
-				local HashPass = StrUtils.SHA1(password)
-				if fs.exists(cuserfile) then
-					local cpass = io.open(cuserfile, "r")
-					local cdataS = cpass:read() 
-					local cdata = textutils.unserialize(cdataS) 
-					local creadpassword = cdata.pass
-					local creadusername = cdata.user
-					local clevel = cdata.settings
-					cpass:close()
-					if username == creadusername and HashPass == creadpassword then
-						local newHashPass = StrUtils.SHA1(passCheck)
-						local fileopen = io.open(cuserfile, "w") 
-						local passwrite = {pass = newHashPass, user = creadusername, settings = clevel} 
-						local dataS = textutils.serialize(passwrite) 
-						local writeIsFail = fileopen:write(dataS)
-						fileopen:close()
-						print("Password changed!")
-						sleep(1.5)
-						shell.run("/sys/usercontrol", tArgs[1])
+				
+				local event, key = os.pullEvent("char")
+				if event == "char" then
+					if key == "a" then
+						print("Please make a username.")
+						write("> ")
+						local username = read()
+						print("Please make a password.")
+						write("> ")
+						local password = read()
+						print("Please confirm the password.")
+						write("> ")
+						local passmakecheck = read()
+						if password == passmakecheck then
+							DOS.usercreate(username, password, "admin", returnName)
+						else
+							print("Passwords didn't match!")
+							sleep(1.5)
+						end
+					elseif key == "r" then
+						print("Please make a username.")
+						write("> ")
+						local usermake = read()
+						print("Please make a password.")
+						write("> ")
+						local passmake = read()
+						print("Please confirm the password.")
+						write("> ")
+						local passmakecheck = read()
+						if passmake == passmakecheck then
+							DOS.usercreate(usermake, passmake, "user", returnName)
+						else
+							print("Passwords didn't match!")
+							sleep(1.5)
+							DOS.rawread("usercontrol", tArgs[1])
+						end
 					else
-						print("Username or password was incorrect!")
+						print("Please select [A] or [R].")
 						sleep(1.5)
+						DOS.rawread("usercontrol", tArgs[1])
 					end
 				else
-					print("That user doesn't exist!")
-					print("Please use the userchecker to list all users on the computer.")
-					sleep(2)
+					print("ERROR")
 				end
-			else
-				print("Please enter a password")
-				os.sleep(1.5)
 			end
 		end
 	end
 end
---end
-		--[[term.clear()
-		term.setCursorPos(1,1)
-		print("Type in the name of the users password that you would like to change.")
-		write("> ")
-		local userchange = read()
-		if userchange ~= nil then
-			print("Please enter the original password.")
-			write("> ")
-			local oPass = read()
-			cuserfile = ("/users/"..userchange)
-			local HashPass = StrUtils.SHA1(oPass)
-			if fs.exists(cuserfile) then
-				local cpass = io.open(cuserfile, "r")
-				local cdataS = cpass:read() 
-				local cdata = textutils.unserialize(cdataS) 
-				local creadpassword = cdata.pass
-				local creadusername = cdata.user
-				local clevel = cdata.settings
-				cpass:close()
-				if userchange == creadusername and HashPass == creadpassword then
-					print("Please enter the new password.")
-					write("> ")
-					local newpass = read()
-					local newHashPass = StrUtils.SHA1(newpass)
-					local fileopen = io.open(cuserfile, "w") 
-					local passwrite = {pass = newHashPass, user = creadusername, settings = clevel} 
-					local dataS = textutils.serialize(passwrite) 
-					local writeIsFail = fileopen:write(dataS)
-					fileopen:close()
-					print("Password changed!")
-					sleep(1.5)
-					DOS.rawread("/sys/admin", tArgs[1])
-					else
-					print("Username or password was incorrect!")
-					sleep(1.5)
-					os.run({}, "/sys/admin", tArgs[1])
-					end
-				else
-				print("That user doesn't exist!")
-				print("Please use the userchecker to list all users on the computer.")
-				sleep(2)
-				os.run({}, "/sys/admin", tArgs[1])
-				end
-			else
-			print("Please enter a password")
-			DOS.rawread("/sys/admin", tArgs[1])
-			end--]]
 DOS.rawread("admin", tArgs[1])

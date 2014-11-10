@@ -54,113 +54,91 @@ end
 
 
 function download()
-	--[[local fileList = {
-        "apis/DOS",
-        "apis/StrUtils",
-        "startup",
-        "sys/admin",
-        "sys/Home",
-        "sys/info",
-        "sys/shell",
-        "sys/uninstall",
-        "sys/update",
-        "sys/usercontrol",
-        "sys/Images/.background",
-        "sys/Images/Title.background",
-        "sys/Images/about.page",
-		"sys/Images/console.page",
-        "sys/Images/credits.page",
-		"sys/Images/settings.page",
-        "sys/Images/shell.icon",
-        "sys/Images/u.icon",
-        "programs/filebrowser",
-		"programs/luaide",
-}--]]
-stats = 0
-function addStatus()
-	stats = stats + 1
-	if stats == 1 then
-		term.setCursorPos(12,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats == 2 then
-		term.setCursorPos(13,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 3 then
-		term.setCursorPos(14,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 4 then
-		term.setCursorPos(15,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 5 then
-		term.setCursorPos(16,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 6 then
-		term.setCursorPos(17,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 7 then
-		term.setCursorPos(18,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 8 then
-		term.setCursorPos(19,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 9 then
-		term.setCursorPos(20,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 10 then
-		term.setCursorPos(21,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 11 then
-		term.setCursorPos(22,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 12 then
-		term.setCursorPos(23,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 13 then
-		term.setCursorPos(24,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 14 then
-		term.setCursorPos(25,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 15 then
-		term.setCursorPos(26,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 16 then
-		term.setCursorPos(27,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 17 then
-		term.setCursorPos(28,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 18 then
-		term.setCursorPos(29,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 19 then
-		term.setCursorPos(30,5)
-		term.setBackgroundColor(colors.gray)
-		print(" ")
-	elseif stats  == 20 then
-		term.setCursorPos(20,5)
-		term.setBackgroundColor(colors.gray)
-		printcentred("                           ")
+	stats = 0
+	function addStatus()
+		stats = stats + 1
+		if stats == 1 then
+			term.setCursorPos(12,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats == 2 then
+			term.setCursorPos(13,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 3 then
+			term.setCursorPos(14,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 4 then
+			term.setCursorPos(15,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 5 then
+			term.setCursorPos(16,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 6 then
+			term.setCursorPos(17,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 7 then
+			term.setCursorPos(18,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 8 then
+			term.setCursorPos(19,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 9 then
+			term.setCursorPos(20,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 10 then
+			term.setCursorPos(21,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 11 then
+			term.setCursorPos(22,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 12 then
+			term.setCursorPos(23,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 13 then
+			term.setCursorPos(24,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 14 then
+			term.setCursorPos(25,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 15 then
+			term.setCursorPos(26,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 16 then
+			term.setCursorPos(27,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 17 then
+			term.setCursorPos(28,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 18 then
+			term.setCursorPos(29,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 19 then
+			term.setCursorPos(30,5)
+			term.setBackgroundColor(colors.gray)
+			print(" ")
+		elseif stats  == 20 then
+			term.setCursorPos(20,5)
+			term.setBackgroundColor(colors.gray)
+			printcentred("                           ")
+		end
 	end
-end
 	for _, file in ipairs(fileList) do
 		term.setCursorPos(11,7)
 		term.setBackgroundColor(colors.lightBlue)
