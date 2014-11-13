@@ -1,13 +1,14 @@
 os.pullEvent = os.pullEventRaw
 _G.shell = shell
+term.setBackgroundColor(colors.lightBlue)
 term.clear()
 term.setCursorPos(1,1)
+term.setTextColor(colors.white)
+
 if not term.isColor() then
 print("To use this version of DarkOS you need an adv.Computer!")
 end
 
-term.setBackgroundColor(colors.lightBlue)
-term.setTextColor(colors.white)
 
 local function printcentred(text)
 	local maxw, maxh = term.getSize() 
@@ -16,7 +17,30 @@ local function printcentred(text)
 	term.write(text)
 	term.setCursorPos(curx,cury+1)
 end
+local function bground()
+	term.clear()
+	term.setCursorPos(1,1)
+	term.setBackgroundColor(colors.red)
+	printcentred("DarkOS is installing")
+	term.setBackgroundColor(colors.lightBlue)
 
+	term.setCursorPos(18,4)
+	term.setBackgroundColor(colors.white)
+	term.setTextColor(colors.black)
+	printcentred("          Updating           ")
+	term.setTextColor(colors.white)
+	term.setCursorPos(11,5)
+	print(" ")
+	term.setCursorPos(39,5)
+	print(" ")
+	term.setCursorPos(20,6)
+	printcentred("                             ")
+	term.setCursorPos(20,5)
+	term.setBackgroundColor(colors.lightGray)
+	printcentred("                           ")
+
+	term.setCursorPos(11,7)
+end
 local fileName = shell.getRunningProgram()
 
 
@@ -45,72 +69,92 @@ function download()
 }
 stats = 0
 local function addStatus()
-	term.clear()
-	term.setCursorPos(1,1)
 	stats = stats + 1
 	if stats == 1 then
-		statusBar = "[X                   ]"
-		printcentred(statusBar)
+		term.setCursorPos(12,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats == 2 then
-		statusBar = "[XX                  ]"
-		printcentred(statusBar)
+		term.setCursorPos(13,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 3 then
-		statusBar = "[XXX                 ]"
-		printcentred(statusBar)
+		term.setCursorPos(14,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 4 then
-		statusBar = "[XXXX                ]"
-		printcentred(statusBar)
+		term.setCursorPos(15,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 5 then
-		statusBar = "[XXXXX               ]"
-		printcentred(statusBar)
+		term.setCursorPos(16,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 6 then
-		statusBar = "[XXXXXX              ]"
-		printcentred(statusBar)
+		term.setCursorPos(17,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 7 then
-		statusBar = "[XXXXXXX             ]"
-		printcentred(statusBar)
+		term.setCursorPos(18,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 8 then
-		statusBar = "[XXXXXXXX            ]"
-		printcentred(statusBar)
+		term.setCursorPos(19,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 9 then
-		statusBar = "[XXXXXXXXX           ]"
-		printcentred(statusBar)
+		term.setCursorPos(20,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 10 then
-		statusBar = "[XXXXXXXXXX          ]"
-		printcentred(statusBar)
+		term.setCursorPos(21,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 11 then
-		statusBar = "[XXXXXXXXXXX         ]"
-		printcentred(statusBar)
+		term.setCursorPos(22,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 12 then
-		statusBar = "[XXXXXXXXXXXX        ]"
-		printcentred(statusBar)
+		term.setCursorPos(23,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 13 then
-		statusBar = "[XXXXXXXXXXXXX       ]"
-		printcentred(statusBar)
+		term.setCursorPos(24,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 14 then
-		statusBar = "[XXXXXXXXXXXXXX      ]"
-		printcentred(statusBar)
+		term.setCursorPos(25,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 15 then
-		statusBar = "[XXXXXXXXXXXXXXX     ]"
-		printcentred(statusBar)
+		term.setCursorPos(26,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 16 then
-		statusBar = "[XXXXXXXXXXXXXXXX    ]"
-		printcentred(statusBar)
+		term.setCursorPos(27,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 17 then
-		statusBar = "[XXXXXXXXXXXXXXXXX   ]"
-		printcentred(statusBar)
+		term.setCursorPos(28,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 18 then
-		statusBar = "[XXXXXXXXXXXXXXXXXX  ]"
-		printcentred(statusBar)
+		term.setCursorPos(29,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 19 then
-		statusBar = "[XXXXXXXXXXXXXXXXXXX ]"
-		printcentred(statusBar)
+		term.setCursorPos(30,5)
+		term.setBackgroundColor(colors.gray)
+		print(" ")
 	elseif stats  == 20 then
-		statusBar = "[XXXXXXXXXXXXXXXXXXXX]"
-		printcentred(statusBar)
+		term.setCursorPos(20,5)
+		term.setBackgroundColor(colors.gray)
+		printcentred("                           ")
 	end
 end
 	for _, file in ipairs(fileList) do
+		term.setCursorPos(11,7)
+		term.setBackgroundColor(colors.lightBlue)
 		print("Downloading: "..file)
 		local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/"..file)
 		if remoteHandle then
@@ -140,13 +184,12 @@ end
 	print("All files downloaded")
 end
 while true do
-	term.clear()
-	term.setCursorPos(1,1)
 	printcentred("Do you want to install DarkOS onto this computer?")
-	printcentred("[Y] or [N]")
+	printcentred("(Y)es or (N)o")
 	local e, key = os.pullEvent()
 	if e == "key" then
 		if key == keys.y then
+			bground()
 			fs.makeDir("apis")
 			fs.makeDir("programs")
 			fs.makeDir("sys")
