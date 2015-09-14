@@ -1,14 +1,16 @@
 _G.shell = shell
 local tArgs = { ... }
-if #tArgs > 1 or #tArgs < 1 then error("Need them args bro") end
+if #tArgs > 2 or #tArgs < 2 then error("Need them args bro") end
+
 local returnName = tArgs[1]
+password = tArgs[2]
 
 local bRunning = true
 local tCommandHistory = {}
 local tEnv = {
 	["exit"] = function()
 		--bRunning = false
-		shell.run("/sys/admin", returnName)
+		shell.run("/sys/admin", returnName, password)
 	end,
 }
 setmetatable( tEnv, { __index = getfenv() } )

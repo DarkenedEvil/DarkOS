@@ -1,6 +1,18 @@
 os.pullEvent = os.pullEventRaw
 term.clear()
 term.setCursorPos(1,1)
+
+function rawread(returnprog, username, CPass)
+	print("Press any key to return.")
+    bRead = true
+    while(bRead) do
+        local sEvent, param = os.pullEvent("key")
+        if(sEvent == "key") then
+            shell.run(returnprog, username)
+        end
+    end
+end
+
 print("Are you sure you want to uninstall DarkOS? [Y]Yes or [N]No?")
 write("> ")
 local input = read()
@@ -43,11 +55,11 @@ if input == "y" then
 		else
 		print("Please choose [Y] or [N].")
 		sleep(1.5)
-		DOS.rawread("admin")
+		rawread("admin")
 		end
 	elseif  input == "n" then
-	DOS.rawread("admin")
+	rawread("admin")
 	else
 	print("Please choose [Y] or [N]")
-	DOS.rawread("admin")
+	rawread("admin")
 	end

@@ -46,7 +46,6 @@ local fileName = shell.getRunningProgram()
 
 function download()
 	local fileList = {
-        "apis/DOS",
         "apis/StrUtils",
         "startup",
         "sys/admin",
@@ -209,7 +208,6 @@ while true do
 	end
 end
 if installed == true then
-	os.loadAPI("/apis/DOS")
 	os.loadAPI("/apis/StrUtils")
 	
 	function drawTitle()
@@ -380,7 +378,7 @@ if installed == true then
 						local hashPass = StrUtils.SHA1(password)
 						local hashSetting = StrUtils.SHA1("admin")
 						if fileopen then
-							local passwrite = {pass = hashPass, user = username, settings = hashSetting} 
+							local passwrite = {pass = hashPass, user = username, settings = hashSetting, clocktime = false} 
 							local dataS = textutils.serialize(passwrite) 
 							local writeIsFail = fileopen.write(dataS) 
 							fileopen.close()

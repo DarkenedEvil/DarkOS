@@ -1,16 +1,61 @@
 os.pullEvent = os.pullEventRaw
 _G.shell = shell --This is here because of an odd bug where sometimes shell.run wouldn't work. You may see this in other parts of the OS aswell
 if term.isColor() then --checking to see if computer is adv.
-	os.loadAPI("/apis/DOS")
 	os.loadAPI("/apis/StrUtils")
-	function printcentred(text)
+	
+	function login(username, password)--Used to login user
+		local hashPass = StrUtils.SHA1(password) --This Takes their password and hashes it to compare to the password on file
+		local hashUser = username -- Resets the name
+		local userfile = ("/users/"..hashUser) -- sets the string for file location
+		if userfile ~= "/users/" then -- Checking to see if folder exists
+			if fs.exists(userfile) then -- Checking to see if the user exists
+				local pass = fs.open(userfile, "r") -- Opens the file in read mode
+				local dataS = pass.readAll() --Gets the information from the file
+				local data = textutils.unserialize(dataS) -- Makes the data a string
+				local readpassword = data.pass -- Finds the hashed password
+				local readusername = data.user -- Finds the username
+				local level = data.settings -- Finds the users level
+				pass.close() -- Closes File
+				if level == StrUtils.SHA1("admin") then -- Checks to see if user is Admin
+					if readpassword == hashPass and hashUser == readusername then -- If everything is correct they login
+						print("testetsetset")
+						shell.run("/sys/admin", username, hashPass)
+					else -- If not then they restart
+						print("Wrong username or password!")
+						sleep(1.5)
+						shell.run("startup")
+					end
+				end
+				if level == StrUtils.SHA1("user") then -- Checks to see if user is regular
+					if readpassword == hashPass and hashUser == readusername then -- If everything is correct they login
+						shell.run("/sys/Home", username)
+					else -- If not they restart
+						print("Wrong username or password.")
+						sleep(1.5)
+						shell.run("startup")
+					end
+				end
+			else
+				print("User does not exist!")
+				sleep(1.5)
+				os.reboot()
+			end
+		else
+			print("User does not exist!")
+			sleep(1.5)
+			os.reboot()
+		end
+	end
+	
+	function printcentred(text)--centers text
 		local maxw, maxh = term.getSize() 
 		local curx, cury = term.getCursorPos()
 		term.setCursorPos((maxw-#text)/2,cury)
 		term.write(text)
 		term.setCursorPos(curx,cury+1)
 	end
-	function drawTitle()
+	
+	function drawTitle()--Draws Title
 		term.clear()
 		term.setCursorPos(1,1)
 		term.setBackgroundColor(colors.black)
@@ -20,7 +65,7 @@ if term.isColor() then --checking to see if computer is adv.
 		paintutils.drawImage(backGround,1,1)
 	end
 	
-	function drawScreen()
+	function drawScreen()--Draws Screen
 		term.setBackgroundColor(colors.lightBlue)
 		term.clear()
 		term.setCursorPos(1,1)
@@ -46,22 +91,22 @@ if term.isColor() then --checking to see if computer is adv.
 		print("X")
 	end
 	
-	function drawUserBox()
-	term.setCursorPos(1, 12)
-	term.setBackgroundColor(colors.lightBlue)
-	term.clearLine()
-	term.setCursorPos(18, 12)
-	term.setBackgroundColor(colors.lightGray)
-	printcentred("              ")
+	function drawUserBox()--Draws Username Box
+		term.setCursorPos(1, 12)
+		term.setBackgroundColor(colors.lightBlue)
+		term.clearLine()
+		term.setCursorPos(18, 12)
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
 	end
 	
-	function drawPassBox()
-	term.setCursorPos(1, 14)
-	term.setBackgroundColor(colors.lightBlue)
-	term.clearLine()
-	term.setCursorPos(18, 14)
-	term.setBackgroundColor(colors.lightGray)
-	printcentred("              ")
+	function drawPassBox()--Draws Password Box
+		term.setCursorPos(1, 14)
+		term.setBackgroundColor(colors.lightBlue)
+		term.clearLine()
+		term.setCursorPos(18, 14)
+		term.setBackgroundColor(colors.lightGray)
+		printcentred("              ")
 	end
 	
 	drawScreen()
@@ -86,15 +131,15 @@ if term.isColor() then --checking to see if computer is adv.
 			end
 		end
 		
-		if key == keys.enter then --If the enter button is pressed, attempt to login
+		--[[if key == keys.enter then --If the enter button is pressed, attempt to login
 			if username == nil or password == nil then
 				print("Please enter a username or password!")
 				sleep(1.5)
 				drawScreen()
 			else
-				DOS.login(username, password)
+				login(username, password) -- Back to that function from earlier
 			end
-		end
+		end]]
 			
 		local event, button, x, y = os.pullEvent()
 		if event == "mouse_click" then
@@ -117,7 +162,7 @@ if term.isColor() then --checking to see if computer is adv.
 					sleep(1.5)
 					drawScreen()
 				else
-					DOS.login(username, password)
+					login(username, password)
 				end
 			elseif x == 51 and y == 1 and button == 1 then --Shutdown Button
 				term.setTextColor(colors.red)
