@@ -7,10 +7,23 @@ function rawread(returnprog, username, CPass)
     while(bRead) do
         local sEvent, param = os.pullEvent("key")
         if(sEvent == "key") then
-            shell.run(returnprog, username)
+            shell.run(returnprog, username, CPass)
         end
     end
 end
+
+local tArgs = {...}
+if #tArgs < 2 then
+	error("Expected Username but got less. Please report this to DarkenedEvil.")
+	rawread("admin", tArgs[1], CPass)
+end
+if #tArgs > 2 then
+	error("Expected Username but got more! Please report this to DarkenedEvil")
+	rawread("admin", tArgs[1], CPass)
+end
+
+returnName = tArgs[1]
+CPass = tArgs[2]
 
 function usercreate(username, password, level, returnName, CPass)--Creates User
 	local hashPass = StrUtils.SHA1(password)
@@ -34,23 +47,9 @@ function usercreate(username, password, level, returnName, CPass)--Creates User
 	else
 		print("Please enter a username ")
 		sleep(1.5)
-		shell.run("/sys/admin", returnName, hashPass)
+		shell.run("/sys/admin", returnName, CPass)
 	end
 end
-
-local tArgs = {...}
-if #tArgs < 2 then
-	error("Expected Username but got less. Please report this to DarkenedEvil.")
-	rawread("admin", tArgs[1], CPass)
-end
-if #tArgs > 2 then
-	error("Expected Username but got more! Please report this to DarkenedEvil")
-	rawread("admin", tArgs[1], CPass)
-end
-
-returnName = tArgs[1]
-CPass = tArgs[2]
-
 function printcentred(text)
 	local maxw, maxh = term.getSize() 
 	local curx, cury = term.getCursorPos()
@@ -111,51 +110,6 @@ while true do
 		elseif x >= 1 and x <= 12 and y == 1 and button == 1 then
 			shell.run("/sys/admin", returnName, password)
 		elseif x >= 17 and x <= 33 and y == 9 and button == 1 then--Delete a User
-			function drawScreen()
-				term.setBackgroundColor(colors.lightBlue)
-				term.clear()
-				term.setCursorPos(1,1)
-				term.setBackgroundColor(colors.blue)
-				print("<----Go Back")
-				term.setBackgroundColor(colors.lightBlue)
-				local maxw, maxh = term.getSize()
-				term.setCursorPos(1,math.floor(maxh/2))
-				printcentred("Enter the Username and Password of the user.")
-				printcentred("             ")
-				printcentred("Username:")
-				term.setBackgroundColor(colors.lightGray)
-				printcentred("              ")
-				term.setBackgroundColor(colors.lightBlue)
-				printcentred("Password:")
-				term.setBackgroundColor(colors.lightGray)
-				printcentred("              ")
-				term.setBackgroundColor(colors.lightBlue)
-				printcentred("             ")
-				printcentred("[Delete]")
-			end
-		
-			function drawAlert(text)
-				term.setBackgroundColor(colors.red)
-				local maxw, maxh = term.getSize()
-				term.setCursorPos(1,math.floor(maxh/2))
-				printcentred(text)
-				term.setBackgroundColor(colors.lightBlue)
-			end	
-		
-			function drawUserBox()
-				term.setCursorPos(1, 12)
-				term.setBackgroundColor(colors.lightBlue)
-				term.clearLine()
-				term.setCursorPos(18, 12)
-				term.setBackgroundColor(colors.lightGray)
-				printcentred("              ")
-			end
-			
-			function drawPassBox()
-				term.setCursorPos(18, 14)
-				term.setBackgroundColor(colors.lightGray)
-				printcentred("              ")
-			end
 			drawScreen()
 			while true do
 				local event, key = os.pullEvent()
@@ -382,6 +336,7 @@ while true do
 				printcentred("              ")
 			end
 			while true do
+				--os.startTimer(1)
 				local event, key = os.pullEvent()
 				if key == keys.tab then
 					if tabs == "password" then
@@ -406,16 +361,18 @@ while true do
 						tabs = "password"
 						term.setBackgroundColor(colors.lightBlue)
 					end
-				elseif key == keys.enter then
-					if passCheck == password then
+				end
+				if key == keys.enter then
+					if passCheck == password and username ~= nil then
 						usercreate(username, password, "admin", returnName, CPass)
 					else
 						print("Passwords didn't match!")
 						sleep(1.5)
+						screen()
+						break
 					end
 				end
 				local event, button, x, y = os.pullEvent()
-				--drawScreen()
 				if event == "mouse_click" then
 					if x >= 1 and x <= 12 and y == 1 and button == 1 then
 						screen()
@@ -442,11 +399,13 @@ while true do
 						term.setBackgroundColor(colors.lightBlue)
 						tabs = "username"
 					elseif x >= 21 and x <= 28 and y == 18 and button == 1 then  --create
-						if passCheck == password then
+						if passCheck == password and username ~= nil then
 							usercreate(username, password, "admin", returnName, CPass)
 						else
 							print("Passwords didn't match!")
 							sleep(1.5)
+							screen()
+							break
 						end
 					end
 				end
@@ -454,4 +413,4 @@ while true do
 		end
 	end
 end
-rawread("admin", tArgs[1], CPass)
+rawread("admin", returnName, CPass)

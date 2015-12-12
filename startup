@@ -18,7 +18,6 @@ if term.isColor() then --checking to see if computer is adv.
 				pass.close() -- Closes File
 				if level == StrUtils.SHA1("admin") then -- Checks to see if user is Admin
 					if readpassword == hashPass and hashUser == readusername then -- If everything is correct they login
-						print("testetsetset")
 						shell.run("/sys/admin", username, hashPass)
 					else -- If not then they restart
 						print("Wrong username or password!")
@@ -117,7 +116,7 @@ if term.isColor() then --checking to see if computer is adv.
 	tabs = "password"
 	
 	while true do
-	
+		os.startTimer(1)
 		local event, key = os.pullEvent() --Waiting for event
 		
 		if key == keys.tab then --If the tab button is pressed, move to next area
@@ -131,15 +130,15 @@ if term.isColor() then --checking to see if computer is adv.
 			end
 		end
 		
-		--[[if key == keys.enter then --If the enter button is pressed, attempt to login
+		if key == keys.enter then --If the enter button is pressed, attempt to login
 			if username == nil or password == nil then
 				print("Please enter a username or password!")
-				sleep(1.5)
+				sleep(.75)
 				drawScreen()
 			else
-				login(username, password) -- Back to that function from earlier
+				login(username, password)
 			end
-		end]]
+		end
 			
 		local event, button, x, y = os.pullEvent()
 		if event == "mouse_click" then
