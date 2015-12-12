@@ -53,16 +53,14 @@ if remoteHandle then
 	version = remoteHandle.readAll()
 	remoteHandle.close()
 	fs.delete("/sys/version")
-	print(version)
 end
-
 
 local info = fs.open("/sys/info", "r")
 local data = info.readAll()
 info.close()
 
 if data < version then
-	shell.run("update", username, password)
+	shell.run("/sys/update", username, password)
 end
 term.setTextColor(colors.black)
 
