@@ -183,6 +183,10 @@ end
 	print("All files downloaded")
 end
 while true do
+	term.setBackgroundColor(colors.lightBlue)
+	term.clear()
+	term.setCursorPos(1,1)
+	term.setTextColor(colors.white)
 	printcentred("Do you want to install DarkOS onto this computer?")
 	printcentred("(Y)es or (N)o")
 	local e, key = os.pullEvent()
