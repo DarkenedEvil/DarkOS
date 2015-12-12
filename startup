@@ -2,6 +2,9 @@ os.pullEvent = os.pullEventRaw
 _G.shell = shell --This is here because of an odd bug where sometimes shell.run wouldn't work. You may see this in other parts of the OS aswell
 if term.isColor() then --checking to see if computer is adv.
 	os.loadAPI("/apis/StrUtils")
+	local info = fs.open("/sys/info", "r")
+	local version = info.readAll()
+	info.close()
 	
 	function login(username, password)--Used to login user
 		local hashPass = StrUtils.SHA1(password) --This Takes their password and hashes it to compare to the password on file
@@ -58,7 +61,7 @@ if term.isColor() then --checking to see if computer is adv.
 		term.clear()
 		term.setCursorPos(1,1)
 		term.setBackgroundColor(colors.black)
-		print("DarkOS 0.1.0")
+		print("DarkOS ", version)
 		term.setBackgroundColor(colors.lightBlue)
 		backGround = paintutils.loadImage("/sys/Images/Title.background")
 		paintutils.drawImage(backGround,1,1)
