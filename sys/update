@@ -6,10 +6,10 @@ term.setCursorPos(1,1)
 term.setTextColor(colors.white)
 
 local tArgs = {...}
-if #tArgs < 1 then
+if #tArgs < 2 then
 	error("Expected Username but got less. Please report this to DarkenedEvil.")
 end
-if #tArgs > 1 then
+if #tArgs > 2 then
 	error("Expected Username but got more! Please report this to DarkenedEvil")
 end
 
@@ -189,4 +189,4 @@ term.setBackgroundColor(colors.lightBlue)
 term.clearLine()
 print("All files downloaded")
 sleep(1)
-shell.run("admin", tArgs[1])
+shell.run("admin", tArgs[1], tArgs[2])
