@@ -27,7 +27,7 @@ local function bground()
 	term.setCursorPos(18,4)
 	term.setBackgroundColor(colors.white)
 	term.setTextColor(colors.black)
-	printcentred("          Updating           ")
+	printcentred("        Downloading          ")
 	term.setTextColor(colors.white)
 	term.setCursorPos(11,5)
 	print(" ")
@@ -154,6 +154,8 @@ end
 	for _, file in ipairs(fileList) do
 		term.setCursorPos(11,7)
 		term.setBackgroundColor(colors.lightBlue)
+		print("                                                 ")
+		term.setCursorPos(11,7)
 		print("Downloading: "..file)
 		local remoteHandle = http.get("https://raw.github.com/DarkenedEvil/DarkOS/master/"..file)
 		if remoteHandle then
@@ -183,6 +185,9 @@ end
 	print("All files downloaded")
 end
 while true do
+	term.clear()
+	term.setCursorPos(1,1)
+	term.setTextColor(colors.white)
 	printcentred("Do you want to install DarkOS onto this computer?")
 	printcentred("(Y)es or (N)o")
 	local e, key = os.pullEvent()
@@ -203,7 +208,7 @@ while true do
 			os.reboot()
 		else
 		printcentred("Please select Yes[Y] or No[N]")
-		os.sleep(1.5)
+		os.sleep(.5)
 		end
 	end
 end
@@ -228,7 +233,7 @@ if installed == true then
 		term.setBackgroundColor(colors.lightBlue)
 		local maxw, maxh = term.getSize()
 		term.setCursorPos(1,math.floor(maxh/2))
-		printcentred("Create the admin account.")
+		printcentred("Create an account.")
 		printcentred("             ")
 		printcentred("Username:")
 		term.setBackgroundColor(colors.lightGray)
@@ -281,6 +286,7 @@ if installed == true then
 	tabs = "password"
 	
 	while true do
+		local maxw, maxh = term.getSize()
 		
 		local event, key = os.pullEvent()
 		if key == keys.tab then
@@ -320,8 +326,9 @@ if installed == true then
 						local writeIsFail = fileopen.write(dataS) 
 						fileopen.close()
 						fs.delete(fileName)
-						printcentred("Thank you for choosing DarkOS!")
-						printcentred("You may now login")
+						term.setCursorPos(1,math.floor(maxh/2))
+						printcentred(" Thank you for choosing DarkOS! ")
+						printcentred("       You may now login        ")
 						sleep(1.5)
 						os.reboot()
 					else
@@ -383,8 +390,9 @@ if installed == true then
 							local writeIsFail = fileopen.write(dataS) 
 							fileopen.close()
 							fs.delete(fileName)
-							printcentred("Thank you for choosing DarkOS!")
-							printcentred("You may now login")
+							term.setCursorPos(1,math.floor(maxh/2))
+							printcentred(" Thank you for choosing DarkOS! ")
+							printcentred("       You may now login        ")
 							sleep(1.5)
 							os.reboot()
 						else
