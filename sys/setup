@@ -179,7 +179,8 @@ end
 				end
 			end
 		else
-			error("Could not download."..file)
+			print("Could not download."..file)
+			os.sleep(.85)
 		end
 	end
 	print("All files downloaded")
@@ -286,65 +287,8 @@ if installed == true then
 	tabs = "password"
 	
 	while true do
+		os.startTimer(1)
 		local maxw, maxh = term.getSize()
-		
-		local event, key = os.pullEvent()
-		if key == keys.tab then
-			if tabs == "password" then
-				drawPassBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 14)
-				password = read("*")
-				tabs = "passCheck"
-				term.setBackgroundColor(colors.lightBlue)
-			elseif tabs == "passCheck" then
-				drawPassCheckBox()
-				term.setBackgroundColor(colors.lightGray)
-				term.setCursorPos(18, 16)
-				passCheck = read("*")
-				term.setBackgroundColor(colors.lightBlue)
-			end
-		elseif key == keys.enter then
-			if password == passCheck then
-				local userfile = ("/users/"..username)
-				if fs.exists(userfile) then
-					term.setBackgroundColor(colors.red)
-					printcentred("Sorry that username is already taken!")
-					term.setBackgroundColor(colors.lightBlue)
-					os.sleep(1.5)
-				else
-					term.setBackgroundColor(colors.lightBlue)
-					term.clear()
-					term.setCursorPos(1,1)
-					drawTitle()
-					local fileopen = fs.open(userfile, "w")
-					local hashPass = StrUtils.SHA1(password)
-					local hashSetting = StrUtils.SHA1("admin")
-					if fileopen then
-						local passwrite = {pass = hashPass, user = username, settings = hashSetting} 
-						local dataS = textutils.serialize(passwrite) 
-						local writeIsFail = fileopen.write(dataS) 
-						fileopen.close()
-						fs.delete(fileName)
-						term.setCursorPos(1,math.floor(maxh/2))
-						printcentred(" Thank you for choosing DarkOS! ")
-						printcentred("       You may now login        ")
-						sleep(1.5)
-						os.reboot()
-					else
-						term.setBackgroundColor(colors.red)
-						printcentred("Unable to open file:"..userfile)
-						term.setBackgroundColor(colors.lightBlue)
-						sleep(1.5)
-					end
-				end
-			else
-				term.setBackgroundColor(colors.red)
-				printcentred("Passwords did not match")
-				term.setBackgroundColor(colors.lightBlue)
-				sleep(1.5)
-			end
-		end
 			
 		local event, button, x, y = os.pullEvent()
 		if event == "mouse_click" then
@@ -389,7 +333,7 @@ if installed == true then
 							local dataS = textutils.serialize(passwrite) 
 							local writeIsFail = fileopen.write(dataS) 
 							fileopen.close()
-							fs.delete(fileName)
+							--fs.delete(fileName)
 							term.setCursorPos(1,math.floor(maxh/2))
 							printcentred(" Thank you for choosing DarkOS! ")
 							printcentred("       You may now login        ")
@@ -408,6 +352,72 @@ if installed == true then
 					term.setBackgroundColor(colors.lightBlue)
 					sleep(1.5)
 				end
+			end
+		end
+		
+		local event, key = os.pullEvent()
+		if key == keys.tab then
+			if tabs == "password" then
+				drawPassBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 14)
+				password = read("*")
+				tabs = "passCheck"
+				term.setBackgroundColor(colors.lightBlue)
+			elseif tabs == "passCheck" then
+				drawPassCheckBox()
+				term.setBackgroundColor(colors.lightGray)
+				term.setCursorPos(18, 16)
+				passCheck = read("*")
+				term.setBackgroundColor(colors.lightBlue)
+			end
+		elseif key == keys.enter then
+			if password ~= null then
+				if passCheck ~= null then
+					if password == passCheck then
+						local userfile = ("/users/"..username)
+						if fs.exists(userfile) then
+							term.setBackgroundColor(colors.red)
+							printcentred("Sorry that username is already taken!")
+							term.setBackgroundColor(colors.lightBlue)
+							os.sleep(1.5)
+						else
+							term.setBackgroundColor(colors.lightBlue)
+							term.clear()
+							term.setCursorPos(1,1)
+							drawTitle()
+							local fileopen = fs.open(userfile, "w")
+							local hashPass = StrUtils.SHA1(password)
+							local hashSetting = StrUtils.SHA1("admin")
+							if fileopen then
+								local passwrite = {pass = hashPass, user = username, settings = hashSetting} 
+								local dataS = textutils.serialize(passwrite) 
+								local writeIsFail = fileopen.write(dataS) 
+								fileopen.close()
+								--fs.delete(fileName)
+								term.setCursorPos(1,math.floor(maxh/2))
+								printcentred(" Thank you for choosing DarkOS! ")
+								printcentred("       You may now login        ")
+								sleep(1.5)
+								os.reboot()
+							else
+								term.setBackgroundColor(colors.red)
+								printcentred("Unable to open file:"..userfile)
+								term.setBackgroundColor(colors.lightBlue)
+								sleep(1.5)
+							end
+						end
+					else
+						term.setBackgroundColor(colors.red)
+						printcentred("Passwords did not match")
+						term.setBackgroundColor(colors.lightBlue)
+						sleep(1.5)
+					end
+				else
+					printcentred("Please re-enter your password.")
+				end
+			else
+				printcentred("Please enter a password!")
 			end
 		end
 	end
